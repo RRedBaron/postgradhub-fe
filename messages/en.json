@@ -1,0 +1,29 @@
+{
+  "common": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "profile": "Profile",
+    "logout": "Log Out",
+    "welcome": "Welcome to PostgradHub!",
+    "loggedOut": "You have successfully logged out.",
+    "loggedIn": "You have successfully logged in."
+  },
+  "profile": {
+    "fullName": "Full Name",
+    "nickName": "Nick Name",
+    "gender": "Gender",
+    "country": "Country",
+    "language": "Language",
+    "timeZone": "Time Zone",
+    "email": "Email",
+    "edit": "Edit",
+    "save": "Save",
+    "addEmail": "+Add Email Address",
+    "myEmail": "My email Address"
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for doesn't exist or has been moved.",
+    "backHome": "Back to Home"
+  }
+}
