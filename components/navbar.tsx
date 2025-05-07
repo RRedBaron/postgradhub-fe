@@ -12,7 +12,7 @@ import { GB, UA } from "country-flag-icons/react/3x2";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
 import { Button } from "@heroui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   Avatar,
   Divider,
@@ -102,10 +102,7 @@ export const Navbar = () => {
     <HeroUINavbar maxWidth="2xl" position="sticky" isBordered className="py-2">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
-          <NextLink
-            className="flex flex-col items-center justify-center"
-            href="/"
-          >
+          <NextLink className="flex items-center justify-center gap-4" href="/">
             <Logo size={48} />
             <p className="font-bold text-inherit">PostgradHub</p>
           </NextLink>

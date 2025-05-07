@@ -6,7 +6,8 @@
     "logout": "Log Out",
     "welcome": "Welcome to PostgradHub!",
     "loggedOut": "You have successfully logged out.",
-    "loggedIn": "You have successfully logged in."
+    "loggedIn": "You have successfully logged in.",
+    "description": "PostgradHub is a platform for postgraduate students to connect, share resources, and collaborate on projects."
   },
   "profile": {
     "fullName": "Full Name",

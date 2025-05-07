@@ -1,13 +1,15 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
-import { NextIntlClientProvider } from "next-intl";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
 
-import { Providers } from "../providers";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
+import { Providers } from "./providers";
+import { routing } from "@/i18n/routing";
+import { getMessages } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: {
@@ -27,22 +29,21 @@ export const viewport: Viewport = {
   ],
 };
 
-async function getMessages(locale: string) {
-  try {
-    return (await import(`../../messages/${locale}.json`)).default;
-  } catch (error) {
-    notFound();
-  }
-}
-
 export default async function RootLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const messages = await getMessages(locale);
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
+  const messages = await getMessages({
+    locale,
+  });
 
   return (
     <html suppressHydrationWarning lang={locale}>

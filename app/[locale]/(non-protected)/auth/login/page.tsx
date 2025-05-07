@@ -2,11 +2,11 @@
 
 import { ROUTES } from "@/common/enums/routes";
 import { emailRegex } from "@/constants";
+import { Link } from "@/i18n/navigation";
 import { useLogin } from "@/lib/hooks";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { addToast } from "@heroui/toast";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 

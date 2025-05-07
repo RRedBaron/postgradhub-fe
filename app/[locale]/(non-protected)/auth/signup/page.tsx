@@ -4,7 +4,7 @@ import { emailRegex } from "@/constants";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Checkbox } from "@heroui/react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useForm } from "react-hook-form";
 import { RegisterRequest } from "@/lib/types/auth";
 import { useRouter } from "next/navigation";

@@ -10,7 +10,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastProvider } from "@heroui/toast";
 import { LanguageProvider } from "@/lib/contexts/language-context";
-import { NextIntlClientProvider } from "next-intl";
 
 export interface ProvidersProps {
   children: React.ReactNode;

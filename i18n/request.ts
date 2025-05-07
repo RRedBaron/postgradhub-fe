@@ -1,21 +1,19 @@
+import { hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { routing } from "./routing";
 
-export default getRequestConfig(async ({ locale }) => {
-  if (!locale) {
-    notFound();
-  }
+export default getRequestConfig(async ({ requestLocale }) => {
+  const requested = await requestLocale;
+  console.log("requested", requested, "12323233");
 
-  let messages;
-  try {
-    messages = (await import(`../messages/${locale}.json`)).default;
-  } catch (error) {
-    notFound();
-  }
+  const locale = hasLocale(routing.locales, requested)
+    ? requested
+    : routing.defaultLocale;
+
+  console.log("locale", locale, "12323");
 
   return {
-    messages,
     locale,
-    timeZone: "Europe/Kiev",
+    messages: (await import(`../messages/${locale}.json`)).default,
   };
 });
