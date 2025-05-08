@@ -127,24 +127,24 @@ const getStatusColor = (status: string) => {
   }
 };
 
-const getStatusText = (status: string) => {
-  switch (status) {
-    case "pending":
-      return "Pending";
-    case "submitted":
-      return "Submitted";
-    case "graded":
-      return "Graded";
-    default:
-      return status;
-  }
-};
-
 export default function AssignmentDetail() {
   const t = useTranslations("assignments");
   const router = useRouter();
   const [newComment, setNewComment] = useState("");
   const [files, setFiles] = useState<File[]>([]);
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "pending":
+        return t("status.pending");
+      case "submitted":
+        return t("status.submitted");
+      case "graded":
+        return t("status.graded");
+      default:
+        return status;
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {

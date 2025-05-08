@@ -75,7 +75,7 @@ export default function Assignments() {
   return (
     <section className="flex flex-col gap-6 py-8 md:py-10 max-w-7xl mx-auto">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">My Assignments</h1>
+        <h1 className="text-2xl font-bold">{t("myAssignments")}</h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -105,10 +105,10 @@ export default function Assignments() {
             </CardBody>
             <CardFooter className="flex justify-between">
               <Chip color={getStatusColor(assignment.status)} variant="flat">
-                {getStatusText(assignment.status)}
+                {t(`status.${assignment.status}`)}
               </Chip>
               <p className="text-small text-default-500">
-                Due: {assignment.dueDate}
+                {t("due")}: {assignment.dueDate}
               </p>
             </CardFooter>
           </Card>

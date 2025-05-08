@@ -29,5 +29,22 @@
     "title": "Page Not Found",
     "description": "The page you are looking for doesn't exist or has been moved.",
     "backHome": "Back to Home"
+  },
+  "assignments": {
+    "myAssignments": "My Assignments",
+    "due": "Due",
+    "status": {
+      "pending": "Pending",
+      "submitted": "Submitted",
+      "graded": "Graded"
+    }
+  },
+  "auth": {
+    "title": "PostgradHub",
+    "login": "Log in",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in"
   }
 }
