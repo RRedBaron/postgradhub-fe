@@ -1,9 +1,10 @@
 "use client";
 
 import { useProfile } from "@/lib/hooks/useProfile";
-import { Button, Input, Select, SelectItem, Avatar } from "@heroui/react";
+import { Button, Input, Select, SelectItem, Avatar, Chip } from "@heroui/react";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Role } from "@/types/default";
 
 const genderOptions = [
   { key: "male", label: "Male" },
@@ -29,6 +30,25 @@ const timezoneOptions = [
   // ...
 ];
 
+const groupOptions = [
+  { key: "group1", label: "Group 1" },
+  { key: "group2", label: "Group 2" },
+  { key: "group3", label: "Group 3" },
+];
+
+const getRoleColor = (role: Role) => {
+  switch (role) {
+    case Role.PhD:
+      return "primary";
+    case Role.SUPERVISOR:
+      return "success";
+    case Role.HEAD:
+      return "warning";
+    default:
+      return "default";
+  }
+};
+
 export default function Profile() {
   const { data } = useProfile();
   const t = useTranslations("profile");
@@ -39,9 +59,16 @@ export default function Profile() {
       <div className="flex flex-col md:flex-row bg-gradient-to-r from-[#191919] to-[#23272f] rounded-xl p-8 items-center gap-8 shadow-lg">
         <Avatar size="lg" src={data?.avatarUrl} />
         <div className="flex-1 flex flex-col gap-1">
-          <span className="text-xl font-bold text-white">
-            {data?.firstname} {data?.lastname}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold text-white">
+              {data?.firstname} {data?.lastname}
+            </span>
+            {data?.role && (
+              <Chip color={getRoleColor(data.role)} variant="flat">
+                {data.role}
+              </Chip>
+            )}
+          </div>
           <span className="text-md text-zinc-400">{data?.email}</span>
         </div>
         <Button color="primary" onPress={() => setEditMode((v) => !v)}>
@@ -57,44 +84,24 @@ export default function Profile() {
           isReadOnly={!editMode}
         />
         <Input
-          label={t("nickName")}
-          placeholder="Your Nick Name"
-          value={data?.nickname || ""}
+          label={t("email")}
+          placeholder="Your Email"
+          value={data?.email || ""}
           isReadOnly={!editMode}
         />
+        <Input
+          label={t("phone")}
+          placeholder="Your Phone Number"
+          value={data?.phone || ""}
+          isReadOnly={!editMode}
+        />
+
         <Select
-          label={t("gender")}
-          selectedKeys={data?.gender ? [data.gender] : []}
-          isDisabled={!editMode}
+          label={t("group")}
+          selectedKeys={data?.group ? [data.group] : []}
+          isDisabled={true}
         >
-          {genderOptions.map((opt) => (
-            <SelectItem key={opt.key}>{opt.label}</SelectItem>
-          ))}
-        </Select>
-        <Select
-          label={t("country")}
-          selectedKeys={data?.country ? [data.country] : []}
-          isDisabled={!editMode}
-        >
-          {countryOptions.map((opt) => (
-            <SelectItem key={opt.key}>{opt.label}</SelectItem>
-          ))}
-        </Select>
-        <Select
-          label={t("language")}
-          selectedKeys={data?.language ? [data.language] : []}
-          isDisabled={!editMode}
-        >
-          {languageOptions.map((opt) => (
-            <SelectItem key={opt.key}>{opt.label}</SelectItem>
-          ))}
-        </Select>
-        <Select
-          label={t("timeZone")}
-          selectedKeys={data?.timezone ? [data.timezone] : []}
-          isDisabled={!editMode}
-        >
-          {timezoneOptions.map((opt) => (
+          {groupOptions.map((opt) => (
             <SelectItem key={opt.key}>{opt.label}</SelectItem>
           ))}
         </Select>

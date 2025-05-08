@@ -7,7 +7,8 @@
     "welcome": "Welcome to PostgradHub!",
     "loggedOut": "You have successfully logged out.",
     "loggedIn": "You have successfully logged in.",
-    "description": "PostgradHub is a platform for postgraduate students to connect, share resources, and collaborate on projects."
+    "description": "PostgradHub is a platform for postgraduate students to connect, share resources, and collaborate on projects.",
+    "assignments": "Assignments"
   },
   "profile": {
     "fullName": "Full Name",
@@ -20,7 +21,9 @@
     "edit": "Edit",
     "save": "Save",
     "addEmail": "+Add Email Address",
-    "myEmail": "My email Address"
+    "myEmail": "My email Address",
+    "phone": "Phone Number",
+    "group": "Group"
   },
   "NotFound": {
     "title": "Page Not Found",

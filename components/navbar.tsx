@@ -116,6 +116,16 @@ export const Navbar = () => {
           <NavbarItem>
             <LanguageSelector />
           </NavbarItem>
+          <NavbarItem>
+            <Button
+              as={Link}
+              color="primary"
+              href={ROUTES.ASSIGNMENTS}
+              variant="flat"
+            >
+              {t("assignments")}
+            </Button>
+          </NavbarItem>
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Avatar

@@ -1,3 +1,5 @@
+import { Role } from "@/types/default";
+
 export interface User {
   id: string;
   email: string;
@@ -9,6 +11,9 @@ export interface User {
   country?: string;
   language?: string;
   timezone?: string;
+  phone?: string;
+  group?: string;
+  role: Role;
   createdAt: string;
   updatedAt: string;
 }
