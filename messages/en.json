@@ -37,7 +37,13 @@
       "pending": "Pending",
       "submitted": "Submitted",
       "graded": "Graded"
-    }
+    },
+    "clickToViewDetails": "Click to view assignment details",
+    "dueDate": "Due Date",
+    "daysRemaining": "Days Remaining",
+    "days": "days",
+    "viewDetails": "View Details",
+    "urgent": "Urgent"
   },
   "auth": {
     "title": "PostgradHub",

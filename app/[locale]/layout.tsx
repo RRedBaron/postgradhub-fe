@@ -3,6 +3,7 @@ import { Metadata, Viewport } from "next";
 import clsx from "clsx";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
@@ -10,6 +11,10 @@ import { Navbar } from "@/components/navbar";
 import { Providers } from "./providers";
 import { routing } from "@/i18n/routing";
 import { getMessages } from "next-intl/server";
+import { ThemeSwitch } from "@/components/theme-switch";
+import { GithubIcon } from "@/components/icons";
+import { ROUTES } from "@/common/enums/routes";
+import { Link as IntlLink } from "@/i18n/navigation";
 
 export const metadata: Metadata = {
   title: {
@@ -61,8 +66,25 @@ export default async function RootLayout({
               <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
                 {children}
               </main>
-              <footer className="w-full flex items-center justify-center py-3">
-                <p>Created by RedBaron. 2025.</p>
+              <footer className="w-full border-t border-divider bg-content1">
+                <div className="container mx-auto max-w-7xl px-6 py-4">
+                  <div className="flex justify-between items-center">
+                    <p className="text-default-500 text-sm">
+                      © {new Date().getFullYear()} PostgradHub
+                    </p>
+                    <div className="flex items-center gap-4">
+                      <a
+                        href="https://github.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-default-500 hover:text-primary"
+                      >
+                        <GithubIcon size={20} />
+                      </a>
+                      <ThemeSwitch />
+                    </div>
+                  </div>
+                </div>
               </footer>
             </div>
           </Providers>

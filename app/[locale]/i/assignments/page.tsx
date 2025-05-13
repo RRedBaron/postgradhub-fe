@@ -1,19 +1,19 @@
 "use client";
 
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Button,
-  Chip,
-} from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { ROUTES } from "@/common/enums/routes";
+import { AssignmentCard } from "./components/AssignmentCard";
+
+type Assignment = {
+  id: number;
+  title: string;
+  subject: string;
+  dueDate: string;
+  status: "pending" | "submitted" | "graded";
+  description: string;
+};
 
 // Mock data for assignments
-const assignments = [
+const assignments: Assignment[] = [
   {
     id: 1,
     title: "Research Paper on Machine Learning",
@@ -42,35 +42,8 @@ const assignments = [
   },
 ];
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "pending":
-      return "warning";
-    case "submitted":
-      return "primary";
-    case "graded":
-      return "success";
-    default:
-      return "default";
-  }
-};
-
-const getStatusText = (status: string) => {
-  switch (status) {
-    case "pending":
-      return "Pending";
-    case "submitted":
-      return "Submitted";
-    case "graded":
-      return "Graded";
-    default:
-      return status;
-  }
-};
-
 export default function Assignments() {
   const t = useTranslations("assignments");
-  const router = useRouter();
 
   return (
     <section className="flex flex-col gap-6 py-8 md:py-10 max-w-7xl mx-auto">
@@ -80,38 +53,7 @@ export default function Assignments() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {assignments.map((assignment) => (
-          <Card
-            key={assignment.id}
-            className="hover:scale-105 transition-transform cursor-pointer bg-content2"
-            isPressable
-            onPress={() =>
-              router.push(`${ROUTES.ASSIGNMENTS}/${assignment.id}`)
-            }
-          >
-            <CardHeader className="flex gap-3">
-              <div className="flex flex-col">
-                <p className="text-md font-bold text-foreground">
-                  {assignment.title}
-                </p>
-                <p className="text-small text-default-500">
-                  {assignment.subject}
-                </p>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <p className="text-small text-foreground-500">
-                {assignment.description}
-              </p>
-            </CardBody>
-            <CardFooter className="flex justify-between">
-              <Chip color={getStatusColor(assignment.status)} variant="flat">
-                {t(`status.${assignment.status}`)}
-              </Chip>
-              <p className="text-small text-default-500">
-                {t("due")}: {assignment.dueDate}
-              </p>
-            </CardFooter>
-          </Card>
+          <AssignmentCard key={assignment.id} assignment={assignment} />
         ))}
       </div>
     </section>

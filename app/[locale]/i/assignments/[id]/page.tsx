@@ -198,7 +198,7 @@ export default function AssignmentDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Main Content */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="bg-gradient-to-r from-[#191919] to-[#23272f]">
+          <Card className="bg-content1">
             <CardHeader>
               <div className="flex flex-col gap-2">
                 <p className="text-small text-default-500">
@@ -279,7 +279,7 @@ export default function AssignmentDetail() {
         {/* Right Column - Submission and Comments */}
         <div className="space-y-6">
           {/* Status Card */}
-          <Card className="bg-gradient-to-r from-[#191919] to-[#23272f]">
+          <Card className="bg-content1">
             <CardHeader>
               <h2 className="text-lg font-semibold">Assignment Status</h2>
             </CardHeader>
@@ -313,7 +313,7 @@ export default function AssignmentDetail() {
           </Card>
 
           {/* Submission Card */}
-          <Card className="bg-gradient-to-r from-[#191919] to-[#23272f]">
+          <Card className="bg-content1">
             <CardHeader>
               <h2 className="text-lg font-semibold">Your Work</h2>
             </CardHeader>
@@ -374,7 +374,7 @@ export default function AssignmentDetail() {
           </Card>
 
           {/* Comments Section */}
-          <Card className="bg-gradient-to-r from-[#191919] to-[#23272f]">
+          <Card className="bg-content1">
             <CardHeader>
               <h2 className="text-lg font-semibold">Comments</h2>
             </CardHeader>

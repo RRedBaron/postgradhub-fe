@@ -37,7 +37,13 @@
       "pending": "В очікуванні",
       "submitted": "Відправлено",
       "graded": "Оцінено"
-    }
+    },
+    "clickToViewDetails": "Натисніть, щоб переглянути деталі завдання",
+    "dueDate": "Термін здачі",
+    "daysRemaining": "Залишилось днів",
+    "days": "днів",
+    "viewDetails": "Переглянути деталі",
+    "urgent": "Терміново"
   },
   "auth": {
     "title": "PostgradHub",
