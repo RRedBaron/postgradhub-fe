@@ -48,7 +48,7 @@ export const Navbar = () => {
       onSuccess: () => {
         router.push(ROUTES.LOGIN);
         addToast({
-          title: t("welcome"),
+          title: "Logged out successfully",
           description: t("loggedOut"),
           color: "success",
         });
@@ -116,16 +116,30 @@ export const Navbar = () => {
           <NavbarItem>
             <LanguageSelector />
           </NavbarItem>
-          <NavbarItem>
-            <Button
-              as={Link}
-              color="primary"
-              href={ROUTES.ASSIGNMENTS}
-              variant="flat"
-            >
-              {t("assignments")}
-            </Button>
-          </NavbarItem>
+          {data.role !== "SUPERVISOR" && (
+            <NavbarItem>
+              <Button
+                as={Link}
+                color="primary"
+                href={ROUTES.ASSIGNMENTS}
+                variant="flat"
+              >
+                {t("assignments")}
+              </Button>
+            </NavbarItem>
+          )}
+          {data.role === "SUPERVISOR" && (
+            <NavbarItem>
+              <Button
+                as={Link}
+                color="secondary"
+                href={ROUTES.SUPERVISOR}
+                variant="flat"
+              >
+                Control Panel
+              </Button>
+            </NavbarItem>
+          )}
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Avatar

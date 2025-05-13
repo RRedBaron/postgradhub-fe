@@ -8,7 +8,8 @@
     "loggedOut": "You have successfully logged out.",
     "loggedIn": "You have successfully logged in.",
     "description": "PostgradHub is a platform for postgraduate students to connect, share resources, and collaborate on projects.",
-    "assignments": "Assignments"
+    "assignments": "Assignments",
+    "supervisor": "Supervisor"
   },
   "profile": {
     "fullName": "Full Name",
@@ -52,5 +53,41 @@
     "email": "Email",
     "password": "Password",
     "signIn": "Sign in"
+  },
+  "supervisor": {
+    "dashboard": "Supervisor Dashboard",
+    "studentsTab": "Students",
+    "assignmentsTab": "Assignments",
+    "studentsList": "Students List",
+    "addStudent": "Add Student",
+    "student": "Student",
+    "progress": "Progress",
+    "status": "Status",
+    "lastActivity": "Last Activity",
+    "actions": "Actions",
+    "viewDetails": "View Details",
+    "message": "Message",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "draft": "Draft"
+    },
+    "assignments": "Assignments",
+    "assignmentsDescription": "Create and manage assignments for your students",
+    "createAssignment": "Create Assignment",
+    "createAssignmentDescription": "Fill in the details to create a new assignment",
+    "edit": "Edit",
+    "assignStudents": "Assign Students",
+    "title": "Title",
+    "enterTitle": "Enter assignment title",
+    "subject": "Subject",
+    "enterSubject": "Enter subject",
+    "dueDate": "Due Date",
+    "description": "Description",
+    "enterDescription": "Enter assignment description",
+    "assignStudents": "Assign Students",
+    "cancel": "Cancel",
+    "create": "Create",
+    "assignedStudents": "Assigned Students"
   }
 }

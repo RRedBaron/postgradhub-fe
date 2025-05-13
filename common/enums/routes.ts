@@ -6,4 +6,5 @@ export enum ROUTES {
 
   PROFILE = "/i/profile",
   ASSIGNMENTS = "/i/assignments",
+  SUPERVISOR = "/i/supervisor",
 }
