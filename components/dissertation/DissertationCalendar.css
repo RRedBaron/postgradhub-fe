@@ -1,0 +1,85 @@
+.custom-calendar {
+  --tw-bg-opacity: 1;
+  background-color: transparent;
+  border-radius: 1rem;
+  font-family: inherit;
+  border: none;
+}
+.custom-calendar .react-calendar__navigation {
+  margin-bottom: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+}
+.custom-calendar .react-calendar__navigation button {
+  background: none;
+  border: none;
+  color: var(--tw-prose-invert, #222);
+  font-size: 1.1rem;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  transition: background 0.2s;
+}
+.custom-calendar .react-calendar__navigation button:enabled:hover {
+  background: #f3f4f6;
+}
+.dark .custom-calendar .react-calendar__navigation button:enabled:hover {
+  background: #27272a;
+}
+.custom-calendar .react-calendar__month-view {
+  border-radius: 1rem;
+}
+.custom-calendar .react-calendar__tile {
+  background: none;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.2rem;
+  color: inherit;
+  transition:
+    background 0.2s,
+    color 0.2s;
+  position: relative;
+}
+.custom-calendar-tile {
+  font-weight: 500;
+}
+.custom-calendar .react-calendar__tile:enabled:hover,
+.custom-calendar .react-calendar__tile:focus {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+.dark .custom-calendar .react-calendar__tile:enabled:hover,
+.dark .custom-calendar .react-calendar__tile:focus {
+  background: #27272a;
+  color: #a5b4fc;
+}
+.selected-day {
+  background: #6366f1 !important;
+  color: #fff !important;
+}
+.dark .selected-day {
+  background: #818cf8 !important;
+  color: #18181b !important;
+}
+.event-day {
+  background: #fef3c7;
+  color: #b45309;
+  font-weight: 700;
+}
+.dark .event-day {
+  background: #78350f;
+  color: #fde68a;
+}
+.custom-calendar .react-calendar__tile--now {
+  border: 1.5px solid #6366f1;
+}
+.dark .custom-calendar .react-calendar__tile--now {
+  border: 1.5px solid #818cf8;
+}
+.custom-calendar .react-calendar__month-view__days__day--neighboringMonth {
+  color: #d1d5db;
+}
+.dark
+  .custom-calendar
+  .react-calendar__month-view__days__day--neighboringMonth {
+  color: #52525b;
+}

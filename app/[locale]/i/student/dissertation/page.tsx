@@ -4,6 +4,10 @@ import React from "react";
 import { useTranslations } from "next-intl";
 import { Card, CardBody, Tabs, Tab } from "@heroui/react";
 import { DissertationTopic } from "@/components/dissertation/DissertationTopic";
+import { DissertationPlan } from "@/components/dissertation/DissertationPlan";
+import { DissertationPublications } from "@/components/dissertation/DissertationPublications";
+import { DissertationFlow } from "@/components/dissertation/DissertationFlow";
+import { DissertationCalendar } from "@/components/dissertation/DissertationCalendar";
 
 export default function DissertationPage() {
   const t = useTranslations("dissertation");
@@ -18,16 +22,16 @@ export default function DissertationPage() {
               <DissertationTopic />
             </Tab>
             <Tab key="plan" title={t("plan")}>
-              <p>{t("plan")}</p>
+              <DissertationPlan />
             </Tab>
             <Tab key="publications" title={t("publications")}>
-              <p>{t("publications")}</p>
+              <DissertationPublications />
             </Tab>
             <Tab key="flow" title={t("documentFlow")}>
-              <p>{t("documentFlow")}</p>
+              <DissertationFlow />
             </Tab>
             <Tab key="calendar" title={t("calendar")}>
-              <p>{t("calendar")}</p>
+              <DissertationCalendar />
             </Tab>
           </Tabs>
         </CardBody>

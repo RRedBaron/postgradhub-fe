@@ -116,15 +116,28 @@
     "enterTitle": "Enter topic title",
     "enterDescription": "Enter topic description",
     "pending": "Pending Approval",
-    "approved": "Approved"
+    "approved": "Approved",
+    "deadline": "Deadline"
   },
   "dissertation": {
     "dissertation": "Dissertation",
     "topicApproval": "Topic Approval",
     "plan": "Plan & Tasks",
     "publications": "Publications",
-    "editor": "Text Editor",
     "documentFlow": "Document Flow",
-    "calendar": "Defense Calendar"
+    "calendar": "Defense Calendar",
+    "enterTaskName": "Enter task name",
+    "addTask": "Add Task",
+    "publicationTitle": "Publication Title",
+    "publicationLink": "Publication Link",
+    "addPublication": "Add Publication",
+    "autoref": "Autoreferat Package",
+    "review": "Review Package",
+    "feedback": "Feedback Package",
+    "upload": "Upload",
+    "uploaded": "Uploaded",
+    "interimEvaluation": "Interim Evaluation",
+    "stateExam": "State Exam",
+    "defense": "Defense"
   }
 }
