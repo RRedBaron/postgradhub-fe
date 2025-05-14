@@ -8,7 +8,8 @@
     "loggedOut": "Ви успішно вийшли з системи.",
     "loggedIn": "Ви успішно увійшли в систему.",
     "description": "PostgradHub - це платформа для спілкування та співпраці між аспірантами, викладачами та дослідниками.",
-    "assignments": "Завдання"
+    "assignments": "Завдання",
+    "dissertation": "Дисертація"
   },
   "profile": {
     "fullName": "Повне ім'я",
@@ -53,5 +54,32 @@
     "email": "Електронна пошта",
     "password": "Пароль",
     "signIn": "Увійти"
+  },
+  "dissertationTopic": {
+    "myTopics": "Мої теми дисертації",
+    "title": "Тема",
+    "description": "Опис",
+    "status": "Статус",
+    "pending": "Очікується",
+    "approved": "Затверджено",
+    "proposeTopic": "Запропонувати тему",
+    "submit": "Надіслати",
+    "uploadProposal": "Завантажити пропозицію",
+    "file": "Файл",
+    "submitDocument": "Надіслати файл",
+    "cancelUpload": "Скасувати завантаження",
+    "supervisorComments": "Коментарі керівника",
+    "noComments": "Коментарів немає",
+    "enterTitle": "Введіть назву теми",
+    "enterDescription": "Введіть опис теми"
+  },
+  "dissertation": {
+    "dissertation": "Дисертація",
+    "topicApproval": "Затвердження теми",
+    "plan": "План та завдання",
+    "publications": "Публікації",
+    "editor": "Текстовий редактор",
+    "documentFlow": "Документообіг",
+    "calendar": "Календар захистів"
   }
 }

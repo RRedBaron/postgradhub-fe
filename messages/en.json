@@ -9,7 +9,8 @@
     "loggedIn": "You have successfully logged in.",
     "description": "PostgradHub is a platform for postgraduate students to connect, share resources, and collaborate on projects.",
     "assignments": "Assignments",
-    "supervisor": "Supervisor"
+    "supervisor": "Supervisor",
+    "dissertation": "Dissertation"
   },
   "profile": {
     "fullName": "Full Name",
@@ -102,5 +103,28 @@
     "assignRole": "Assign role",
     "assign": "Assign",
     "HEAD": "Head"
+  },
+  "dissertationTopic": {
+    "dissertation": "Dissertation",
+    "mySubmission": "My Dissertation Submission",
+    "uploadProposal": "Upload Proposal Document",
+    "file": "File",
+    "submitDocument": "Submit Document",
+    "cancelUpload": "Cancel Upload",
+    "supervisorComments": "Supervisor Comments",
+    "noComments": "No comments yet",
+    "enterTitle": "Enter topic title",
+    "enterDescription": "Enter topic description",
+    "pending": "Pending Approval",
+    "approved": "Approved"
+  },
+  "dissertation": {
+    "dissertation": "Dissertation",
+    "topicApproval": "Topic Approval",
+    "plan": "Plan & Tasks",
+    "publications": "Publications",
+    "editor": "Text Editor",
+    "documentFlow": "Document Flow",
+    "calendar": "Defense Calendar"
   }
 }

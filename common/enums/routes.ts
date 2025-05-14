@@ -10,4 +10,5 @@ export enum ROUTES {
 
   HEAD = "/i/head",
   HEAD_REPORTS = "/i/head/reports",
+  DISSERTATION = "/i/student/dissertation",
 }

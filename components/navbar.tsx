@@ -123,16 +123,28 @@ export const Navbar = () => {
               <LanguageSelector />
             </NavbarItem>
             {data.role === "PhD" && (
-              <NavbarItem>
-                <Button
-                  as={Link}
-                  color="primary"
-                  href={ROUTES.ASSIGNMENTS}
-                  variant="flat"
-                >
-                  {t("assignments")}
-                </Button>
-              </NavbarItem>
+              <>
+                <NavbarItem>
+                  <Button
+                    as={Link}
+                    color="primary"
+                    href={ROUTES.ASSIGNMENTS}
+                    variant="flat"
+                  >
+                    {t("assignments")}
+                  </Button>
+                </NavbarItem>
+                <NavbarItem>
+                  <Button
+                    as={Link}
+                    color="primary"
+                    href={ROUTES.DISSERTATION}
+                    variant="flat"
+                  >
+                    {t("dissertation")}
+                  </Button>
+                </NavbarItem>
+              </>
             )}
             {data.role === "SUPERVISOR" && (
               <NavbarItem>
