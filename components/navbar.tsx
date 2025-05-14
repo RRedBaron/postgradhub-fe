@@ -37,7 +37,7 @@ const languageOptions = [
 ];
 
 export const Navbar = () => {
-  const { data } = useProfile();
+  const { data, isLoading } = useProfile();
   const { mutate: logoutUser } = useLogout();
   const router = useRouter();
   const { language, setLanguage } = useLanguage();
@@ -108,88 +108,96 @@ export const Navbar = () => {
           </NextLink>
         </NavbarBrand>
       </NavbarContent>
-      {data ? (
-        <NavbarContent as="div" justify="end">
-          <NavbarItem className="hidden sm:flex gap-2">
-            <ThemeSwitch />
-          </NavbarItem>
-          <NavbarItem>
-            <LanguageSelector />
-          </NavbarItem>
-          {data.role !== "SUPERVISOR" && (
+      <NavbarContent
+        className="hidden sm:flex basis-1/5 sm:basis-full"
+        justify="end"
+      >
+        {isLoading ? (
+          <div className="flex items-center gap-2" />
+        ) : data ? (
+          <>
+            <NavbarItem className="hidden sm:flex gap-2">
+              <ThemeSwitch />
+            </NavbarItem>
+            <NavbarItem>
+              <LanguageSelector />
+            </NavbarItem>
+            {data.role !== "SUPERVISOR" && (
+              <NavbarItem>
+                <Button
+                  as={Link}
+                  color="primary"
+                  href={ROUTES.ASSIGNMENTS}
+                  variant="flat"
+                >
+                  {t("assignments")}
+                </Button>
+              </NavbarItem>
+            )}
+            {data.role === "SUPERVISOR" && (
+              <NavbarItem>
+                <Button
+                  as={Link}
+                  color="secondary"
+                  href={ROUTES.SUPERVISOR}
+                  variant="flat"
+                >
+                  Control Panel
+                </Button>
+              </NavbarItem>
+            )}
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <Avatar
+                  isBordered
+                  as="button"
+                  className="transition-transform"
+                  color="secondary"
+                  name="Jason Hughes"
+                  size="sm"
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownItem
+                  key="profile"
+                  onPress={() => router.push(ROUTES.PROFILE)}
+                >
+                  {t("profile")}
+                  <Divider className="mt-2" />
+                </DropdownItem>
+                <DropdownItem
+                  key="logout"
+                  color="danger"
+                  onPress={handleLogout}
+                >
+                  {t("logout")}
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </>
+        ) : (
+          // Пользователь не аутентифицирован
+          <>
+            <NavbarItem className="hidden sm:flex gap-2">
+              <ThemeSwitch />
+            </NavbarItem>
+            <NavbarItem>
+              <LanguageSelector />
+            </NavbarItem>
             <NavbarItem>
               <Button
                 as={Link}
                 color="primary"
-                href={ROUTES.ASSIGNMENTS}
+                href={ROUTES.LOGIN}
                 variant="flat"
               >
-                {t("assignments")}
+                {t("signIn")}
               </Button>
             </NavbarItem>
-          )}
-          {data.role === "SUPERVISOR" && (
-            <NavbarItem>
-              <Button
-                as={Link}
-                color="secondary"
-                href={ROUTES.SUPERVISOR}
-                variant="flat"
-              >
-                Control Panel
-              </Button>
-            </NavbarItem>
-          )}
-          <Dropdown placement="bottom-end">
-            <DropdownTrigger>
-              <Avatar
-                isBordered
-                as="button"
-                className="transition-transform"
-                color="secondary"
-                name="Jason Hughes"
-                size="sm"
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-              />
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem
-                key="profile"
-                onPress={() => router.push(ROUTES.PROFILE)}
-              >
-                {t("profile")}
-                <Divider className="mt-2" />
-              </DropdownItem>
-
-              <DropdownItem key="logout" color="danger" onPress={handleLogout}>
-                {t("logout")}
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </NavbarContent>
-      ) : (
-        <NavbarContent
-          className="hidden sm:flex basis-1/5 sm:basis-full"
-          justify="end"
-        >
-          <NavbarItem className="hidden sm:flex gap-2">
-            <ThemeSwitch />
-          </NavbarItem>
-          <NavbarItem>
-            <LanguageSelector />
-          </NavbarItem>
-          <NavbarItem>
-            <Button
-              as={Link}
-              color="primary"
-              href={ROUTES.LOGIN}
-              variant="flat"
-            >
-              {t("signIn")}
-            </Button>
-          </NavbarItem>
-        </NavbarContent>
-      )}
+          </>
+        )}
+      </NavbarContent>
     </HeroUINavbar>
   );
 };

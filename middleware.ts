@@ -36,6 +36,8 @@ export async function middleware(request: NextRequest) {
     pathnameWithoutLocale.startsWith(ROUTES.LOGIN) ||
     pathnameWithoutLocale.startsWith(ROUTES.REGISTER);
   const isSupervisorRoute = pathnameWithoutLocale.startsWith(ROUTES.SUPERVISOR);
+  const isHeadRoute = pathnameWithoutLocale.startsWith("/i/head");
+  const isStudentRoute = pathnameWithoutLocale.startsWith("/i/student");
 
   if (isProtectedRoute && !isLoggedIn) {
     return NextResponse.redirect(
@@ -43,7 +45,19 @@ export async function middleware(request: NextRequest) {
     );
   }
 
+  if (isStudentRoute && userRole !== Role.PhD) {
+    return NextResponse.redirect(
+      new URL(`/${locale}${ROUTES.HOME}`, request.url)
+    );
+  }
+
   if (isSupervisorRoute && userRole !== Role.SUPERVISOR) {
+    return NextResponse.redirect(
+      new URL(`/${locale}${ROUTES.HOME}`, request.url)
+    );
+  }
+
+  if (isHeadRoute && userRole !== Role.HEAD) {
     return NextResponse.redirect(
       new URL(`/${locale}${ROUTES.HOME}`, request.url)
     );

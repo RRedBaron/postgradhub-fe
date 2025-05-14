@@ -89,5 +89,17 @@
     "cancel": "Cancel",
     "create": "Create",
     "assignedStudents": "Assigned Students"
+  },
+  "head": {
+    "dashboard": "Head Dashboard",
+    "studentsTab": "Students",
+    "rolesTab": "Users and Roles",
+    "allStudents": "All students",
+    "assignSupervisor": "Assign supervisor",
+    "attach": "Attach",
+    "users": "Users",
+    "assignRole": "Assign role",
+    "assign": "Assign",
+    "HEAD": "Head"
   }
 }

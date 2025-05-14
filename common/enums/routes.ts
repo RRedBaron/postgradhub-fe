@@ -5,6 +5,9 @@ export enum ROUTES {
   REGISTER = "/auth/register",
 
   PROFILE = "/i/profile",
-  ASSIGNMENTS = "/i/assignments",
+  ASSIGNMENTS = "/i/student/assignments",
   SUPERVISOR = "/i/supervisor",
+
+  HEAD = "/i/head",
+  HEAD_REPORTS = "/i/head/reports",
 }
