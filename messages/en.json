@@ -91,6 +91,7 @@
     "assignedStudents": "Assigned Students"
   },
   "head": {
+    "head": "Head",
     "dashboard": "Head Dashboard",
     "studentsTab": "Students",
     "rolesTab": "Users and Roles",

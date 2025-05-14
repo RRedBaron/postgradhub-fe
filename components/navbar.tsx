@@ -122,7 +122,7 @@ export const Navbar = () => {
             <NavbarItem>
               <LanguageSelector />
             </NavbarItem>
-            {data.role !== "SUPERVISOR" && (
+            {data.role === "PhD" && (
               <NavbarItem>
                 <Button
                   as={Link}
@@ -143,6 +143,18 @@ export const Navbar = () => {
                   variant="flat"
                 >
                   Control Panel
+                </Button>
+              </NavbarItem>
+            )}
+            {data.role === "HEAD" && (
+              <NavbarItem>
+                <Button
+                  as={Link}
+                  color="primary"
+                  href={ROUTES.HEAD}
+                  variant="flat"
+                >
+                  {t("head")}
                 </Button>
               </NavbarItem>
             )}
@@ -177,7 +189,6 @@ export const Navbar = () => {
             </Dropdown>
           </>
         ) : (
-          // Пользователь не аутентифицирован
           <>
             <NavbarItem className="hidden sm:flex gap-2">
               <ThemeSwitch />
