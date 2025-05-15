@@ -30,9 +30,6 @@ export default function DissertationPage() {
             <Tab key="flow" title={t("documentFlow")}>
               <DissertationFlow />
             </Tab>
-            <Tab key="calendar" title={t("calendar")}>
-              <DissertationCalendar />
-            </Tab>
           </Tabs>
         </CardBody>
       </Card>
