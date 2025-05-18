@@ -138,6 +138,21 @@
     "uploaded": "Uploaded",
     "interimEvaluation": "Interim Evaluation",
     "stateExam": "State Exam",
-    "defense": "Defense"
+    "defense": "Defense",
+    "defenseBooking": "Defense Booking",
+    "bookDefense": "Book Defense",
+    "clearSelection": "Clear Selection",
+    "bookedDefenses": "Booked Defenses",
+    "cancel": "Cancel",
+    "taskDescription": "Task description (optional)",
+    "priorityLow": "Low Priority",
+    "priorityMedium": "Medium Priority",
+    "priorityHigh": "High Priority",
+    "status": {
+      "pending": "Pending",
+      "in_progress": "In Progress",
+      "completed": "Completed"
+    },
+    "selectDate": "Select date"
   }
 }

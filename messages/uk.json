@@ -80,6 +80,21 @@
     "publications": "Публікації",
     "editor": "Текстовий редактор",
     "documentFlow": "Документообіг",
-    "calendar": "Календар захистів"
+    "calendar": "Календар захистів",
+    "defenseBooking": "Бронювання захисту",
+    "bookDefense": "Забронювати захист",
+    "clearSelection": "Очистити вибір",
+    "bookedDefenses": "Заброньовані захисти",
+    "cancel": "Скасувати",
+    "taskDescription": "Опис завдання (необов'язково)",
+    "priorityLow": "Низький пріоритет",
+    "priorityMedium": "Середній пріоритет",
+    "priorityHigh": "Високий пріоритет",
+    "status": {
+      "pending": "В очікуванні",
+      "in_progress": "В процесі",
+      "completed": "Завершено"
+    },
+    "selectDate": "Виберіть дату"
   }
 }

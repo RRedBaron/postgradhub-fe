@@ -7,7 +7,7 @@ import { DissertationTopic } from "@/components/dissertation/DissertationTopic";
 import { DissertationPlan } from "@/components/dissertation/DissertationPlan";
 import { DissertationPublications } from "@/components/dissertation/DissertationPublications";
 import { DissertationFlow } from "@/components/dissertation/DissertationFlow";
-import { DissertationCalendar } from "@/components/dissertation/DissertationCalendar";
+import { DissertationDefense } from "@/components/dissertation/DissertationDefense";
 
 export default function DissertationPage() {
   const t = useTranslations("dissertation");
@@ -29,6 +29,9 @@ export default function DissertationPage() {
             </Tab>
             <Tab key="flow" title={t("documentFlow")}>
               <DissertationFlow />
+            </Tab>
+            <Tab key="defense" title={t("defenseBooking")}>
+              <DissertationDefense />
             </Tab>
           </Tabs>
         </CardBody>
