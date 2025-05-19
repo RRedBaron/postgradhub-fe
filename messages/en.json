@@ -10,11 +10,27 @@
     "description": "PostgradHub is a platform for postgraduate students to connect, share resources, and collaborate on projects.",
     "assignments": "Assignments",
     "supervisor": "Supervisor",
-    "dissertation": "Dissertation"
+    "dissertation": "Dissertation",
+    "error": {
+      "title": "Something went wrong",
+      "description": "An error occurred while processing your request",
+      "tryAgain": "Try Again"
+    },
+    "loading": "Loading...",
+    "feature1": {
+      "title": "Academic Collaboration",
+      "description": "Connect with supervisors and fellow researchers"
+    },
+    "feature2": {
+      "title": "Research Management",
+      "description": "Manage your research projects and track progress"
+    }
   },
   "profile": {
-    "fullName": "Full Name",
-    "nickName": "Nick Name",
+    "fullName": "First Name",
+    "lastName": "Last Name",
+    "secondName": "Middle Name",
+    "nickName": "Nickname",
     "gender": "Gender",
     "country": "Country",
     "language": "Language",
@@ -23,9 +39,12 @@
     "edit": "Edit",
     "save": "Save",
     "addEmail": "+Add Email Address",
-    "myEmail": "My email Address",
+    "myEmail": "My Email Address",
     "phone": "Phone Number",
-    "group": "Group"
+    "group": "Group",
+    "loading": "Loading profile...",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Failed to update profile"
   },
   "NotFound": {
     "title": "Page Not Found",
@@ -45,7 +64,12 @@
     "daysRemaining": "Days Remaining",
     "days": "days",
     "viewDetails": "View Details",
-    "urgent": "Urgent"
+    "urgent": "Urgent",
+    "submit": "Submit",
+    "upload": "Upload Files",
+    "comment": "Add Comment",
+    "comments": "Comments",
+    "noComments": "No comments yet"
   },
   "auth": {
     "title": "PostgradHub",
@@ -53,7 +77,15 @@
     "signUp": "Sign Up",
     "email": "Email",
     "password": "Password",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "loginFailed": "Login failed",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "termsAndConditions": "I agree to the Terms and Conditions",
+    "termsLink": "Terms and Conditions",
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating Account..."
   },
   "supervisor": {
     "dashboard": "Supervisor Dashboard",
@@ -86,10 +118,9 @@
     "dueDate": "Due Date",
     "description": "Description",
     "enterDescription": "Enter assignment description",
-    "assignStudents": "Assign Students",
+    "assignedStudents": "Assigned Students",
     "cancel": "Cancel",
-    "create": "Create",
-    "assignedStudents": "Assigned Students"
+    "create": "Create"
   },
   "head": {
     "head": "Head",
