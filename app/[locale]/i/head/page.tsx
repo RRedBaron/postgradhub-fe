@@ -27,11 +27,11 @@ import { useTranslations } from "next-intl";
 const mockStudents = [
   {
     id: 1,
-    name: "Иван Иванов",
-    email: "ivanov@example.com",
+    name: "Іван Іваненко",
+    email: "ivanenko@example.com",
     avatar: "https://i.pravatar.cc/150?img=4",
     year: 2022,
-    supervisor: "Петров П.П.",
+    supervisor: "Петренко П.П.",
     progress: 80,
     status: "active",
     lastActivity: "2025-05-10",
@@ -39,11 +39,11 @@ const mockStudents = [
   },
   {
     id: 2,
-    name: "Мария Смирнова",
-    email: "smirnova@example.com",
+    name: "Марія Смирненко",
+    email: "smirnenko@example.com",
     avatar: "https://i.pravatar.cc/150?img=5",
     year: 2023,
-    supervisor: "Сидоров С.С.",
+    supervisor: "Сидоренко С.С.",
     progress: 60,
     status: "active",
     lastActivity: "2025-05-12",
@@ -52,31 +52,36 @@ const mockStudents = [
 ];
 
 const mockSupervisors = [
-  { id: 1, name: "Петров П.П." },
-  { id: 2, name: "Сидоров С.С." },
-  { id: 3, name: "Новиков Н.Н." },
+  { id: 1, name: "Петренко П.П." },
+  { id: 2, name: "Сидоренко С.С." },
+  { id: 3, name: "Новиченко Н.Н." },
 ];
 
 const mockUsers = [
-  { id: 1, name: "Иван Иванов", email: "ivanov@example.com", role: "PhD" },
+  { id: 1, name: "Іван Іваненко", email: "ivanenko@example.com", role: "PhD" },
   {
     id: 2,
-    name: "Петров П.П.",
-    email: "petrov@example.com",
+    name: "Петренко П.П.",
+    email: "petrenko@example.com",
     role: "SUPERVISOR",
   },
-  { id: 3, name: "Мария Смирнова", email: "smirnova@example.com", role: "PhD" },
+  {
+    id: 3,
+    name: "Марія Смирненко",
+    email: "smirnenko@example.com",
+    role: "PhD",
+  },
   {
     id: 4,
-    name: "Сидоров С.С.",
-    email: "sidorov@example.com",
+    name: "Сидоренко С.С.",
+    email: "sidorенко@example.com",
     role: "SUPERVISOR",
   },
 ];
 
 const roleOptions = [
   { key: "PhD", label: "Студент" },
-  { key: "SUPERVISOR", label: "Руководитель" },
+  { key: "SUPERVISOR", label: "Керівник" },
 ];
 
 export default function HeadDashboard() {
@@ -92,7 +97,7 @@ export default function HeadDashboard() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
-  // Назначить руководителя студенту
+  // Назначити керівника студенту
   const handleAssignSupervisor = () => {
     if (selectedStudentId && selectedSupervisor) {
       setStudents((prev) =>
@@ -112,7 +117,7 @@ export default function HeadDashboard() {
     }
   };
 
-  // Назначить роль пользователю
+  // Назначити роль користувачу
   const handleAssignRole = () => {
     if (selectedUserId && selectedRole) {
       setUsers((prev) =>
@@ -128,26 +133,26 @@ export default function HeadDashboard() {
   return (
     <section className="flex flex-col gap-6 py-8 md:py-10 max-w-7xl mx-auto">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Панель заведующего</h1>
+        <h1 className="text-2xl font-bold">Панель завідуючого</h1>
         <a href="/i/head/reports" className="text-primary underline text-base">
-          Отчетность
+          Звітність
         </a>
       </div>
       <Card>
         <CardBody>
           <Tabs aria-label="Head Dashboard">
-            <Tab key="students" title="Студенты">
+            <Tab key="students" title="Студенти">
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Все студенты</h2>
+                <h2 className="text-xl font-semibold">Всі студенти</h2>
                 <Table aria-label="Students list">
                   <TableHeader>
                     <TableColumn>Студент</TableColumn>
-                    <TableColumn>Год поступления</TableColumn>
-                    <TableColumn>Руководитель</TableColumn>
-                    <TableColumn>Прогресс</TableColumn>
+                    <TableColumn>Рік вступу</TableColumn>
+                    <TableColumn>Керівник</TableColumn>
+                    <TableColumn>Прогрес</TableColumn>
                     <TableColumn>Статус</TableColumn>
-                    <TableColumn>Последняя активность</TableColumn>
-                    <TableColumn>Действия</TableColumn>
+                    <TableColumn>Остання активність</TableColumn>
+                    <TableColumn>Дії</TableColumn>
                   </TableHeader>
                   <TableBody>
                     {students.map((student) => (
@@ -190,8 +195,8 @@ export default function HeadDashboard() {
                             size="sm"
                           >
                             {student.status === "active"
-                              ? "Активен"
-                              : "Неактивен"}
+                              ? "Активний"
+                              : "Неактивний"}
                           </Chip>
                         </TableCell>
                         <TableCell>
@@ -203,7 +208,7 @@ export default function HeadDashboard() {
                         </TableCell>
                         <TableCell>
                           <Select
-                            label="Назначить руководителя"
+                            label="Назначити керівника"
                             selectedKeys={
                               selectedStudentId === student.id &&
                               selectedSupervisor
@@ -234,7 +239,7 @@ export default function HeadDashboard() {
                               !selectedSupervisor
                             }
                           >
-                            Прикрепить
+                            Прикріпити
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -243,15 +248,15 @@ export default function HeadDashboard() {
                 </Table>
               </div>
             </Tab>
-            <Tab key="roles" title="Пользователи и роли">
+            <Tab key="roles" title="Користувачі та ролі">
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Пользователи</h2>
+                <h2 className="text-xl font-semibold">Користувачі</h2>
                 <Table aria-label="Users list">
                   <TableHeader>
-                    <TableColumn>Имя</TableColumn>
+                    <TableColumn>Ім'я</TableColumn>
                     <TableColumn>Email</TableColumn>
                     <TableColumn>Роль</TableColumn>
-                    <TableColumn>Действия</TableColumn>
+                    <TableColumn>Дії</TableColumn>
                   </TableHeader>
                   <TableBody>
                     {users.map((user) => (
@@ -275,7 +280,7 @@ export default function HeadDashboard() {
                         </TableCell>
                         <TableCell>
                           <Select
-                            label="Назначить роль"
+                            label="Назначити роль"
                             selectedKeys={
                               selectedUserId === user.id && selectedRole
                                 ? [selectedRole]
@@ -304,7 +309,7 @@ export default function HeadDashboard() {
                               user.role === "HEAD"
                             }
                           >
-                            Назначить
+                            Назначити
                           </Button>
                         </TableCell>
                       </TableRow>

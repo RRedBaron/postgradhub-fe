@@ -15,9 +15,10 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { format, isAfter, isBefore } from "date-fns";
-import { ru } from "date-fns/locale";
+import { uk } from "date-fns/locale";
 import { Calendar } from "@heroui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
+import { Chip } from "@heroui/react";
 
 interface Task {
   id: number;
@@ -122,7 +123,7 @@ export function DissertationPlan() {
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {deadline ? (
-                        format(deadline, "d MMMM yyyy", { locale: ru })
+                        format(deadline, "d MMMM yyyy", { locale: uk })
                       ) : (
                         <span>{t("selectDate")}</span>
                       )}
@@ -199,13 +200,30 @@ export function DissertationPlan() {
                           >
                             {task.name}
                           </h4>
-                          <span
-                            className={`text-sm ${getPriorityColor(task.priority)}`}
+                          <Chip
+                            size="sm"
+                            color={
+                              task.status === "completed"
+                                ? "success"
+                                : task.status === "in_progress"
+                                  ? "warning"
+                                  : "default"
+                            }
                           >
-                            {t(
-                              `priority${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}`
-                            )}
-                          </span>
+                            {t(`status.${task.status}`)}
+                          </Chip>
+                          <Chip
+                            size="sm"
+                            color={
+                              task.priority === "high"
+                                ? "danger"
+                                : task.priority === "medium"
+                                  ? "warning"
+                                  : "default"
+                            }
+                          >
+                            {t(`priority${task.priority}`)}
+                          </Chip>
                         </div>
                         {task.description && (
                           <p className="text-sm text-gray-600 mt-1">
@@ -223,7 +241,7 @@ export function DissertationPlan() {
                               }
                             >
                               {format(new Date(task.deadline), "d MMMM yyyy", {
-                                locale: ru,
+                                locale: uk,
                               })}
                             </span>
                           </div>

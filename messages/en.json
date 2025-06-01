@@ -55,9 +55,9 @@
     "myAssignments": "My Assignments",
     "due": "Due",
     "status": {
-      "pending": "Pending",
-      "submitted": "Submitted",
-      "graded": "Graded"
+      "PENDING": "Pending",
+      "COMPLETED": "Submitted",
+      "EXPIRED": "Graded"
     },
     "clickToViewDetails": "Click to view assignment details",
     "dueDate": "Due Date",

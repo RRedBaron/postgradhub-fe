@@ -55,9 +55,9 @@
     "myAssignments": "Мої завдання",
     "due": "Термін",
     "status": {
-      "pending": "В очікуванні",
-      "submitted": "Відправлено",
-      "graded": "Оцінено"
+      "PENDING": "В очікуванні",
+      "COMPLETED": "Відправлено",
+      "EXPIRED": "Оцінено"
     },
     "clickToViewDetails": "Натисніть, щоб переглянути деталі завдання",
     "dueDate": "Термін здачі",

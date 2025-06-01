@@ -31,9 +31,9 @@ const tasksStats = {
 };
 
 const supervisorStats = [
-  { name: "Петров П.П.", onTime: 90, total: 20 },
-  { name: "Сидоров С.С.", onTime: 70, total: 15 },
-  { name: "Новиков Н.Н.", onTime: 60, total: 10 },
+  { name: "Петренко П.П.", onTime: 90, total: 20 },
+  { name: "Сидоренко С.С.", onTime: 70, total: 15 },
+  { name: "Новиченко Н.Н.", onTime: 60, total: 10 },
 ];
 
 const yearStats = [
@@ -46,7 +46,7 @@ export default function HeadReports() {
   const t = useTranslations("head");
 
   const pieData = {
-    labels: ["В срок", "С опозданием"],
+    labels: ["Вчасно", "З запізненням"],
     datasets: [
       {
         data: [tasksStats.onTime, tasksStats.late],
@@ -86,7 +86,7 @@ export default function HeadReports() {
     labels: supervisorStats.map((s) => s.name),
     datasets: [
       {
-        label: "% задач в срок",
+        label: "% завдань вчасно",
         data: supervisorStats.map((s) => s.onTime),
         backgroundColor: "#38bdf8",
         borderRadius: 8,
@@ -122,7 +122,7 @@ export default function HeadReports() {
         grid: { color: "#e5e7eb" },
         title: {
           display: true,
-          text: "% в срок",
+          text: "% вчасно",
           color: "#334155",
           font: { size: 16 },
         },
@@ -135,7 +135,7 @@ export default function HeadReports() {
     labels: yearStats.map((y) => y.year),
     datasets: [
       {
-        label: "В срок",
+        label: "Вчасно",
         data: yearStats.map((y) => y.onTime),
         backgroundColor: "#22c55e",
         borderRadius: 8,
@@ -143,7 +143,7 @@ export default function HeadReports() {
         categoryPercentage: 0.5,
       },
       {
-        label: "С опозданием",
+        label: "З запізненням",
         data: yearStats.map((y) => y.late),
         backgroundColor: "#f59e42",
         borderRadius: 8,
@@ -190,28 +190,28 @@ export default function HeadReports() {
 
   return (
     <section className="flex flex-col gap-6 py-8 md:py-10 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Отчетность и аналитика</h1>
+      <h1 className="text-2xl font-bold mb-4">Звітність та аналітика</h1>
       <Card>
         <CardBody>
           <Tabs aria-label="Head Reports">
-            <Tab key="tasks" title="Задачи в срок">
+            <Tab key="tasks" title="Завдання вчасно">
               <div className="flex flex-col md:flex-row gap-8 items-center justify-center">
                 <div className="w-80 h-80 bg-white rounded-xl shadow-lg flex items-center justify-center p-6">
                   <Pie data={pieData} options={pieOptions} />
                 </div>
                 <div>
                   <h2 className="text-lg font-semibold mb-2">
-                    % задач, сданных в срок
+                    % завдань, зданих вчасно
                   </h2>
                   <ul className="text-default-500">
                     <li>
-                      В срок:{" "}
+                      Вчасно:{" "}
                       <span className="text-green-600 font-bold">
                         {tasksStats.onTime}%
                       </span>
                     </li>
                     <li>
-                      С опозданием:{" "}
+                      З запізненням:{" "}
                       <span className="text-orange-500 font-bold">
                         {tasksStats.late}%
                       </span>
@@ -220,19 +220,19 @@ export default function HeadReports() {
                 </div>
               </div>
             </Tab>
-            <Tab key="supervisors" title="Рейтинг руководителей">
+            <Tab key="supervisors" title="Рейтинг керівників">
               <div className="w-full md:w-2/3 mx-auto bg-white rounded-xl shadow-lg p-6">
                 <Bar data={barData} options={barOptions} />
                 <h2 className="text-lg font-semibold mt-4 text-center">
-                  Лучшие руководители по сдаче задач в срок
+                  Найкращі керівники за здачею завдань вчасно
                 </h2>
               </div>
             </Tab>
-            <Tab key="years" title="По годам">
+            <Tab key="years" title="По роках">
               <div className="w-full md:w-2/3 mx-auto bg-white rounded-xl shadow-lg p-6">
                 <Bar data={yearBarData} options={yearBarOptions} />
                 <h2 className="text-lg font-semibold mt-4 text-center">
-                  Динамика по годам
+                  Динамика по роках
                 </h2>
               </div>
             </Tab>

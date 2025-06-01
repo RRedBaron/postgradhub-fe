@@ -12,7 +12,7 @@ import {
   Avatar,
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ROUTES } from "@/common/enums/routes";
 import {
   FiPaperclip,
@@ -21,107 +21,19 @@ import {
   FiUpload,
   FiSend,
 } from "react-icons/fi";
-
-// Add type for attachments
-interface Attachment {
-  id: number;
-  name: string;
-  size: string;
-  type: string;
-}
-
-// Update the comment type
-interface Comment {
-  id: number;
-  author: {
-    name: string;
-    avatar: string;
-    role: "teacher" | "student";
-  };
-  content: string;
-  timestamp: string;
-  attachments: Attachment[];
-}
-
-// Mock data for a single assignment
-const assignment = {
-  id: 1,
-  title: "Research Paper on Machine Learning",
-  subject: "Artificial Intelligence",
-  dueDate: "2024-04-15T23:59:59Z", // Updated to include time
-  status: "pending",
-  description:
-    "Write a comprehensive research paper on recent advances in machine learning algorithms.",
-  requirements: [
-    "Minimum 10 pages",
-    "Include recent research papers (last 2 years)",
-    "Focus on practical applications",
-    "Include code examples",
-  ],
-  attachedFiles: [
-    {
-      id: 1,
-      name: "Assignment Guidelines.pdf",
-      size: "2.5 MB",
-      type: "application/pdf",
-    },
-    {
-      id: 2,
-      name: "Sample Research Paper.docx",
-      size: "1.8 MB",
-      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    },
-  ],
-  submittedFile: null,
-  grade: null,
-  comments: [
-    {
-      id: 1,
-      author: {
-        name: "Dr. Smith",
-        avatar: "https://i.pravatar.cc/150?img=1",
-        role: "teacher",
-      },
-      content:
-        "Please make sure to include recent research papers from 2023-2024.",
-      timestamp: "2024-03-15T10:30:00Z",
-      attachments: [],
-    },
-    {
-      id: 2,
-      author: {
-        name: "John Doe",
-        avatar: "https://i.pravatar.cc/150?img=2",
-        role: "student",
-      },
-      content:
-        "I have a question about the minimum page requirement. Does it include references?",
-      timestamp: "2024-03-15T11:45:00Z",
-      attachments: [],
-    },
-    {
-      id: 3,
-      author: {
-        name: "Dr. Smith",
-        avatar: "https://i.pravatar.cc/150?img=1",
-        role: "teacher",
-      },
-      content:
-        "Yes, the 10 pages should include references. However, the reference list itself should not exceed 2 pages.",
-      timestamp: "2024-03-15T12:15:00Z",
-      attachments: [],
-    },
-  ],
-};
+import { useGetAssignmentById } from "@/lib/hooks/useAssignments";
+import { useGetComments, useCreateComment } from "@/lib/hooks/useComments";
+import { useProfile } from "@/lib/hooks/useProfile";
+import { Assignment, Comment } from "@/lib/types/assignment";
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "pending":
+    case "PENDING":
       return "warning";
-    case "submitted":
+    case "COMPLETED":
       return "primary";
-    case "graded":
-      return "success";
+    case "EXPIRED":
+      return "danger";
     default:
       return "default";
   }
@@ -129,18 +41,27 @@ const getStatusColor = (status: string) => {
 
 export default function AssignmentDetail() {
   const t = useTranslations("assignments");
+  const { id = "" } = useParams();
   const router = useRouter();
   const [newComment, setNewComment] = useState("");
   const [files, setFiles] = useState<File[]>([]);
 
+  const { data: assignment, isLoading: isAssignmentLoading } =
+    useGetAssignmentById(id as string);
+  const { data: comments, isLoading: isCommentsLoading } = useGetComments(
+    id as string
+  );
+  const { data: currentUser } = useProfile();
+  const createComment = useCreateComment();
+
   const getStatusText = (status: string) => {
     switch (status) {
-      case "pending":
+      case "PENDING":
         return t("status.pending");
-      case "submitted":
-        return t("status.submitted");
-      case "graded":
-        return t("status.graded");
+      case "COMPLETED":
+        return t("status.completed");
+      case "EXPIRED":
+        return t("status.expired");
       default:
         return status;
     }
@@ -153,19 +74,31 @@ export default function AssignmentDetail() {
   };
 
   const handleSubmit = () => {
-    // Here you would typically upload the files and submit the assignment
     console.log("Submitting assignment with files:", files);
   };
 
   const handleCommentSubmit = () => {
-    if (newComment.trim()) {
-      // Here you would typically send the comment to the server
-      console.log("Submitting comment:", newComment);
-      setNewComment("");
+    if (newComment.trim() && currentUser) {
+      createComment.mutate(
+        {
+          text: newComment.trim(),
+          assignmentId: id as string,
+          authorId: currentUser.id,
+        },
+        {
+          onSuccess: () => {
+            setNewComment("");
+          },
+          onError: (error) => {
+            console.error("Failed to create comment:", error);
+          },
+        }
+      );
     }
   };
 
   const formatDate = (dateString: string) => {
+    if (!dateString) return "";
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
       month: "short",
@@ -176,6 +109,7 @@ export default function AssignmentDetail() {
   };
 
   const formatDeadline = (dateString: string) => {
+    if (!dateString) return "";
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
       month: "long",
@@ -185,6 +119,16 @@ export default function AssignmentDetail() {
       hour12: true,
     }).format(date);
   };
+
+  if (isAssignmentLoading || !assignment) {
+    return (
+      <section className="py-8 md:py-10 max-w-7xl mx-auto px-4">
+        <div className="flex justify-center items-center min-h-[200px]">
+          <p>Loading assignment...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-8 md:py-10 max-w-7xl mx-auto px-4">
@@ -233,31 +177,26 @@ export default function AssignmentDetail() {
                 <div>
                   <h2 className="text-lg font-semibold mb-2">Requirements</h2>
                   <ul className="list-disc list-inside text-default-400">
-                    {assignment.requirements.map((req, index) => (
+                    {assignment.requirements?.map((req, index) => (
                       <li key={index}>{req}</li>
                     ))}
                   </ul>
                 </div>
 
-                {assignment.attachedFiles &&
-                  assignment.attachedFiles.length > 0 && (
+                {assignment.attachments &&
+                  assignment.attachments.length > 0 && (
                     <div>
                       <h2 className="text-lg font-semibold mb-2">
                         Attached Files
                       </h2>
                       <div className="flex flex-col gap-2">
-                        {assignment.attachedFiles.map((file) => (
+                        {assignment.attachments.map((file, index) => (
                           <div
-                            key={file.id}
+                            key={index}
                             className="flex items-center gap-2 p-2 bg-default-100 rounded-lg"
                           >
                             <FiFile className="text-primary" />
-                            <span className="text-default-400">
-                              {file.name}
-                            </span>
-                            <span className="text-small text-default-500">
-                              ({file.size})
-                            </span>
+                            <span className="text-default-400">{file}</span>
                             <Button
                               size="sm"
                               variant="light"
@@ -300,14 +239,6 @@ export default function AssignmentDetail() {
                     {formatDeadline(assignment.dueDate)}
                   </span>
                 </div>
-                {assignment.grade && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-default-500">Grade</span>
-                    <span className="font-semibold text-success">
-                      {assignment.grade}
-                    </span>
-                  </div>
-                )}
               </div>
             </CardBody>
           </Card>
@@ -382,59 +313,39 @@ export default function AssignmentDetail() {
               <div className="space-y-6">
                 {/* Comments List */}
                 <div className="space-y-4">
-                  {assignment.comments.map((comment) => (
-                    <div key={comment.id} className="flex gap-3">
-                      <Avatar
-                        src={comment.author.avatar}
-                        alt={comment.author.name}
-                        className="w-8 h-8"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold">
-                            {comment.author.name}
-                          </span>
-                          <span className="text-small text-default-500">
-                            {formatDate(comment.timestamp)}
-                          </span>
+                  {isCommentsLoading ? (
+                    <p>Loading comments...</p>
+                  ) : (
+                    comments?.map((comment) => (
+                      <div key={comment.id} className="flex gap-3">
+                        <Avatar
+                          src={`https://ui-avatars.com/api/?name=${comment.author.firstName}+${comment.author.lastName}&background=random`}
+                          alt={`${comment.author.firstName} ${comment.author.lastName}`}
+                          className="w-8 h-8"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">
+                              {`${comment.author.firstName} ${comment.author.lastName}`}
+                            </span>
+                            <span className="text-small text-default-500">
+                              {formatDate(comment.createdAt)}
+                            </span>
+                          </div>
+                          <p className="text-default-400 mt-1">
+                            {comment.text}
+                          </p>
                         </div>
-                        <p className="text-default-400 mt-1">
-                          {comment.content}
-                        </p>
-                        {comment.attachments &&
-                          comment.attachments.length > 0 && (
-                            <div className="mt-2 flex flex-col gap-2">
-                              {comment.attachments.map((file) => (
-                                <div
-                                  key={file.id}
-                                  className="flex items-center gap-2 p-2 bg-default-100 rounded-lg"
-                                >
-                                  <FiFile className="text-primary" />
-                                  <span className="text-default-400">
-                                    {file.name}
-                                  </span>
-                                  <Button
-                                    size="sm"
-                                    variant="light"
-                                    className="ml-auto"
-                                    startContent={<FiDownload />}
-                                  >
-                                    Download
-                                  </Button>
-                                </div>
-                              ))}
-                            </div>
-                          )}
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
 
                 {/* New Comment Input */}
                 <div className="flex gap-3">
                   <Avatar
-                    src="https://i.pravatar.cc/150?img=2"
-                    alt="Your Name"
+                    src={`https://ui-avatars.com/api/?name=${currentUser?.firstName}+${currentUser?.lastName}&background=random`}
+                    alt={`${currentUser?.firstName} ${currentUser?.lastName}`}
                     className="w-8 h-8"
                   />
                   <div className="flex-1">
@@ -443,13 +354,19 @@ export default function AssignmentDetail() {
                       value={newComment}
                       onChange={(e) => setNewComment(e.target.value)}
                       className="mb-2"
+                      isDisabled={createComment.isPending}
                     />
                     <div className="flex justify-end">
                       <Button
                         color="primary"
                         onPress={handleCommentSubmit}
                         startContent={<FiSend />}
-                        isDisabled={!newComment.trim()}
+                        isDisabled={
+                          !newComment.trim() ||
+                          createComment.isPending ||
+                          !currentUser
+                        }
+                        isLoading={createComment.isPending}
                       >
                         Comment
                       </Button>
