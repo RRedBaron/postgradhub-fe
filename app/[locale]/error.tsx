@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@heroui/button";
 import { useEffect } from "react";
 
-export default function Error({
+export default function ErrorBoundary({
   error,
   reset,
 }: {
