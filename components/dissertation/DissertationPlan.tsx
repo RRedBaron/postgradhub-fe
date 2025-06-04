@@ -14,78 +14,79 @@ import {
   Trash2,
   ChevronDown,
 } from "lucide-react";
-import { format, isAfter, isBefore } from "date-fns";
+import { format, isAfter, isBefore, setHours, setMinutes } from "date-fns";
 import { uk } from "date-fns/locale";
 import { Calendar } from "@heroui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
 import { Chip } from "@heroui/react";
-
-interface Task {
-  id: number;
-  name: string;
-  deadline: string;
-  status: "pending" | "in_progress" | "completed";
-  priority: "low" | "medium" | "high";
-  description?: string;
-}
+import {
+  useGetTasks,
+  useCreateTask,
+  useUpdateTask,
+  useDeleteTask,
+} from "@/lib/hooks";
+import { Task, TaskPriority, TaskStatus } from "@/lib/types/task";
 
 export function DissertationPlan() {
   const t = useTranslations("dissertation");
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const { data: tasks = [], isLoading } = useGetTasks();
+  const createTask = useCreateTask();
+  const updateTask = useUpdateTask();
+  const deleteTask = useDeleteTask();
+
   const [name, setName] = useState("");
   const [deadline, setDeadline] = useState<Date | null>(null);
-  const [priority, setPriority] = useState<Task["priority"]>("medium");
+  const [deadlineTime, setDeadlineTime] = useState("12:00");
+  const [priority, setPriority] = useState<TaskPriority>(TaskPriority.MEDIUM);
   const [description, setDescription] = useState("");
 
-  const addTask = () => {
-    if (!name || !deadline) return;
-    setTasks([
-      ...tasks,
-      {
-        id: Date.now(),
-        name,
-        deadline: deadline.toISOString(),
-        status: "pending",
-        priority,
-        description: description || undefined,
-      },
-    ]);
+  const handleAddTask = () => {
+    const [hours, minutes] = deadlineTime.split(":").map(Number);
+    const deadlineWithTime = setMinutes(setHours(deadline, hours), minutes);
+
+    createTask.mutate({
+      name,
+      deadline: deadlineWithTime.toISOString(),
+      priority,
+      description: description || undefined,
+    });
+
     setName("");
     setDeadline(null);
+    setDeadlineTime("12:00");
     setDescription("");
-    setPriority("medium");
+    setPriority(TaskPriority.MEDIUM);
   };
 
-  const updateTaskStatus = (taskId: number, newStatus: Task["status"]) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === taskId ? { ...task, status: newStatus } : task
-      )
-    );
+  const handleUpdateTaskStatus = (taskId: string, newStatus: TaskStatus) => {
+    updateTask.mutate({
+      id: taskId,
+      task: { status: newStatus },
+    });
   };
 
-  const deleteTask = (taskId: number) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
+  const handleDeleteTask = (taskId: string) => {
+    deleteTask.mutate(taskId);
   };
 
-  const getPriorityColor = (priority: Task["priority"]) => {
+  const getPriorityColor = (priority: TaskPriority) => {
     switch (priority) {
-      case "high":
+      case TaskPriority.HIGH:
         return "text-red-500";
-      case "medium":
+      case TaskPriority.MEDIUM:
         return "text-yellow-500";
-      case "low":
+      case TaskPriority.LOW:
         return "text-green-500";
     }
   };
 
-  const getStatusIcon = (status: Task["status"]) => {
+  const getStatusIcon = (status: TaskStatus) => {
     switch (status) {
-      case "completed":
+      case TaskStatus.COMPLETED:
         return <CheckCircle2 className="w-5 h-5 text-green-500" />;
-      case "in_progress":
+      case TaskStatus.IN_PROGRESS:
         return <AlertCircle className="w-5 h-5 text-yellow-500" />;
-      case "pending":
+      case TaskStatus.PENDING:
         return <Circle className="w-5 h-5 text-gray-400" />;
     }
   };
@@ -96,6 +97,10 @@ export function DissertationPlan() {
       isBefore(deadlineDate, new Date()) && !isAfter(deadlineDate, new Date())
     );
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <section className="flex flex-col gap-6">
@@ -116,7 +121,7 @@ export function DissertationPlan() {
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
-                      variant="outline"
+                      variant="flat"
                       className={`w-full justify-start text-left font-normal ${
                         !deadline && "text-muted-foreground"
                       }`}
@@ -130,26 +135,32 @@ export function DissertationPlan() {
                       <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
                       selected={deadline}
-                      onSelect={setDeadline}
+                      onSelect={(date: Date | null) => setDeadline(date)}
                       initialFocus
-                      disabled={(date) => isBefore(date, new Date())}
+                      disabled={(date: Date) => isBefore(date, new Date())}
                     />
                   </PopoverContent>
                 </Popover>
+                <input
+                  type="time"
+                  value={deadlineTime}
+                  onChange={(e) => setDeadlineTime(e.target.value)}
+                  className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
                 <select
                   value={priority}
-                  onChange={(e) =>
-                    setPriority(e.target.value as Task["priority"])
-                  }
+                  onChange={(e) => setPriority(e.target.value as TaskPriority)}
                   className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 >
-                  <option value="low">{t("priorityLow")}</option>
-                  <option value="medium">{t("priorityMedium")}</option>
-                  <option value="high">{t("priorityHigh")}</option>
+                  <option value={TaskPriority.LOW}>{t("priorityLow")}</option>
+                  <option value={TaskPriority.MEDIUM}>
+                    {t("priorityMedium")}
+                  </option>
+                  <option value={TaskPriority.HIGH}>{t("priorityHigh")}</option>
                 </select>
               </div>
               <Input
@@ -161,11 +172,11 @@ export function DissertationPlan() {
             </div>
             <div className="flex items-end">
               <Button
-                onPress={addTask}
+                onPress={handleAddTask}
                 className="w-full"
-                disabled={!name || !deadline}
+                disabled={!name || !deadline || createTask.isPending}
               >
-                {t("addTask")}
+                {createTask.isPending ? t("adding") : t("addTask")}
               </Button>
             </div>
           </div>
@@ -176,18 +187,18 @@ export function DissertationPlan() {
             {tasks.map((task) => (
               <Card
                 key={task.id}
-                className="hover:bg-gray-50 transition-colors"
+                className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
                 <CardBody>
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3 flex-1">
                       <button
                         onClick={() => {
-                          const newStatus: Task["status"] =
-                            task.status === "completed"
-                              ? "pending"
-                              : "completed";
-                          updateTaskStatus(task.id, newStatus);
+                          const newStatus =
+                            task.status === TaskStatus.COMPLETED
+                              ? TaskStatus.PENDING
+                              : TaskStatus.COMPLETED;
+                          handleUpdateTaskStatus(task.id, newStatus);
                         }}
                         className="mt-1"
                       >
@@ -196,33 +207,33 @@ export function DissertationPlan() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <h4
-                            className={`font-medium ${task.status === "completed" ? "line-through text-gray-500" : ""}`}
+                            className={`font-medium ${task.status === TaskStatus.COMPLETED ? "line-through text-gray-500" : ""}`}
                           >
                             {task.name}
                           </h4>
                           <Chip
                             size="sm"
                             color={
-                              task.status === "completed"
+                              task.status === TaskStatus.COMPLETED
                                 ? "success"
-                                : task.status === "in_progress"
+                                : task.status === TaskStatus.IN_PROGRESS
                                   ? "warning"
                                   : "default"
                             }
                           >
-                            {t(`status.${task.status}`)}
+                            {t(`status.${task.status.toLowerCase()}`)}
                           </Chip>
                           <Chip
                             size="sm"
                             color={
-                              task.priority === "high"
+                              task.priority === TaskPriority.HIGH
                                 ? "danger"
-                                : task.priority === "medium"
+                                : task.priority === TaskPriority.MEDIUM
                                   ? "warning"
                                   : "default"
                             }
                           >
-                            {t(`priority${task.priority}`)}
+                            {t(`priority.${task.priority.toLowerCase()}`)}
                           </Chip>
                         </div>
                         {task.description && (
@@ -259,7 +270,8 @@ export function DissertationPlan() {
                         size="sm"
                         variant="flat"
                         color="danger"
-                        onPress={() => deleteTask(task.id)}
+                        onPress={() => handleDeleteTask(task.id)}
+                        disabled={deleteTask.isPending}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

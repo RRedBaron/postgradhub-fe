@@ -24,7 +24,11 @@
     "feature2": {
       "title": "Research Management",
       "description": "Manage your research projects and track progress"
-    }
+    },
+    "controlPanel": "Control Panel",
+    "adding": "Adding...",
+    "attachments": "Attachments",
+    "uploading": "Uploading..."
   },
   "profile": {
     "fullName": "First Name",
@@ -57,7 +61,10 @@
     "status": {
       "PENDING": "Pending",
       "COMPLETED": "Submitted",
-      "EXPIRED": "Graded"
+      "EXPIRED": "Graded",
+      "REJECTED": "Rejected",
+      "SUBMITTED": "Submitted",
+      "NOT_SUBMITTED": "Not Submitted"
     },
     "clickToViewDetails": "Click to view assignment details",
     "dueDate": "Due Date",
@@ -103,7 +110,11 @@
     "status": {
       "active": "Active",
       "inactive": "Inactive",
-      "draft": "Draft"
+      "draft": "Draft",
+      "late": "Late",
+      "rejected": "Rejected",
+      "submitted": "Submitted",
+      "notSubmitted": "Not Submitted"
     },
     "assignments": "Assignments",
     "assignmentsDescription": "Create and manage assignments for your students",
@@ -120,7 +131,9 @@
     "enterDescription": "Enter assignment description",
     "assignedStudents": "Assigned Students",
     "cancel": "Cancel",
-    "create": "Create"
+    "create": "Create",
+    "attachments": "Attachments",
+    "uploading": "Uploading file..."
   },
   "head": {
     "head": "Head",
@@ -148,7 +161,12 @@
     "enterDescription": "Enter topic description",
     "pending": "Pending Approval",
     "approved": "Approved",
-    "deadline": "Deadline"
+    "deadline": "Deadline",
+    "submit": "Submit",
+    "uploading": "Uploading...",
+    "upload": "Upload",
+    "uploaded": "Uploaded",
+    "cancelSelection": "Cancel Selection"
   },
   "dissertation": {
     "dissertation": "Dissertation",
@@ -182,8 +200,13 @@
     "status": {
       "pending": "Pending",
       "in_progress": "In Progress",
-      "completed": "Completed"
+      "completed": "Completed",
+      "late": "Late",
+      "rejected": "Rejected",
+      "submitted": "Submitted",
+      "notSubmitted": "Not Submitted"
     },
-    "selectDate": "Select date"
+    "selectDate": "Select date",
+    "adding": "Adding..."
   }
 }

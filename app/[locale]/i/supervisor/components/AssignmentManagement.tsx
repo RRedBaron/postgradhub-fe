@@ -20,9 +20,10 @@ import {
   Divider,
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { FiEdit2, FiUsers, FiCalendar, FiFileText } from "react-icons/fi";
+import { FiEdit2, FiUsers, FiCalendar, FiFileText, FiX } from "react-icons/fi";
+import { FileUploaderMinimal } from "@uploadcare/react-uploader/next";
+import "@uploadcare/react-uploader/core.css";
 
-// Mock data for assignments
 const assignments = [
   {
     id: 1,
@@ -46,20 +47,38 @@ const assignments = [
   },
 ];
 
-// Mock data for students
 const students = [
   { id: 1, name: "John Doe" },
   { id: 2, name: "Jane Smith" },
   { id: 3, name: "Mike Johnson" },
 ];
 
+interface UploadcareFile {
+  cdnUrl: string;
+}
+
 export const AssignmentManagement = () => {
   const t = useTranslations("supervisor");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
+  const [attachments, setAttachments] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleUploadSuccess = (file: UploadcareFile) => {
+    setAttachments((prev) => [...prev, file.cdnUrl]);
+    setIsUploading(false);
+  };
+
+  const handleUploadError = (error: Error) => {
+    console.error("Upload failed:", error);
+    setIsUploading(false);
+  };
+
+  const handleRemoveAttachment = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const handleCreateAssignment = () => {
-    // Here you would typically create a new assignment
     onClose();
   };
 
@@ -209,10 +228,52 @@ export const AssignmentManagement = () => {
                   </SelectItem>
                 ))}
               </Select>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-small font-medium">
+                  {t("attachments")}
+                </label>
+                <div className="flex items-center gap-2">
+                  <FileUploaderMinimal
+                    sourceList="local, camera, facebook, gdrive"
+                    pubkey="a33fe610c62b2d39b4e9"
+                    onFileUploadSuccess={handleUploadSuccess}
+                    className="w-full"
+                  />
+                </div>
+                {isUploading && (
+                  <div className="text-small text-default-500">
+                    Uploading file...
+                  </div>
+                )}
+                {attachments.length > 0 && (
+                  <div className="flex flex-col gap-2 mt-2">
+                    {attachments.map((fileUrl, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-2 p-2 bg-default-100 rounded-lg"
+                      >
+                        <FiFileText className="text-primary" />
+                        <span className="text-default-400 truncate">
+                          {fileUrl.split("/").pop()}
+                        </span>
+                        <Button
+                          size="sm"
+                          variant="light"
+                          className="ml-auto"
+                          onPress={() => handleRemoveAttachment(index)}
+                        >
+                          <FiX />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button variant="light" onPress={onClose}>
+            <Button color="danger" variant="light" onPress={onClose}>
               {t("cancel")}
             </Button>
             <Button color="primary" onPress={handleCreateAssignment}>

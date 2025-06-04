@@ -2,14 +2,19 @@
 
 import React, { useState } from "react";
 import { Card, CardBody } from "@heroui/react";
-import { Button } from "@heroui/button";
 import { useTranslations } from "next-intl";
-import { Upload } from "lucide-react";
+import { FileUploaderMinimal } from "@uploadcare/react-uploader/next";
+import "@uploadcare/react-uploader/core.css";
 
 interface Doc {
   id: string;
   name: string;
   status: "pending" | "uploaded";
+  fileUrl?: string;
+}
+
+interface UploadcareFile {
+  cdnUrl: string;
 }
 
 export function DissertationFlow() {
@@ -20,31 +25,45 @@ export function DissertationFlow() {
     { id: "feedback", name: t("feedback"), status: "pending" },
   ];
   const [docs, setDocs] = useState<Doc[]>(initialDocs);
+  const [uploadingDocId, setUploadingDocId] = useState<string | null>(null);
 
-  const handleUpload = (id: string, file: File) => {
-    setDocs(docs.map((d) => (d.id === id ? { ...d, status: "uploaded" } : d)));
+  const handleUploadSuccess = (docId: string, file: UploadcareFile) => {
+    setDocs(
+      docs.map((d) =>
+        d.id === docId ? { ...d, status: "uploaded", fileUrl: file.cdnUrl } : d
+      )
+    );
+    setUploadingDocId(null);
+  };
+
+  const handleUploadError = (error: Error) => {
+    console.error("Upload failed:", error);
+    setUploadingDocId(null);
   };
 
   return (
     <section className="flex flex-col gap-4">
       <h3 className="text-lg font-semibold">{t("documentFlow")}</h3>
       {docs.map((doc) => (
-        <Card key={doc.id} variant="flat">
+        <Card key={doc.id}>
           <CardBody className="flex justify-between items-center">
             <span>{doc.name}</span>
             {doc.status === "pending" ? (
-              <label className="flex items-center gap-2 text-primary cursor-pointer">
-                <Upload className="w-5 h-5" />
-                {t("upload")}
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.currentTarget.files?.[0];
-                    if (file) handleUpload(doc.id, file);
-                  }}
+              <div className="flex items-center gap-2">
+                <FileUploaderMinimal
+                  sourceList="local, camera, facebook, gdrive"
+                  pubkey="a33fe610c62b2d39b4e9"
+                  onFileUploadSuccess={(file) =>
+                    handleUploadSuccess(doc.id, file)
+                  }
+                  className="w-full"
                 />
-              </label>
+                {uploadingDocId === doc.id && (
+                  <span className="text-small text-default-500">
+                    Uploading...
+                  </span>
+                )}
+              </div>
             ) : (
               <span className="flex items-center gap-2 text-green-600">
                 {t("uploaded")}

@@ -14,7 +14,6 @@ import {
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
-// Mock data for students
 const students = [
   {
     id: 1,

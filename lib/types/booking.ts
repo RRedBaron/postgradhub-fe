@@ -8,6 +8,7 @@ export interface CreateBookingDto {
   startDate: Date;
   endDate: Date;
   description?: string;
+  userId: string;
 }
 
 export interface Booking {

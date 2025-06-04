@@ -23,7 +23,6 @@ import {
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
 
-// TODO: заменить на реальные данные с бэка
 const mockStudents = [
   {
     id: 1,
@@ -97,7 +96,6 @@ export default function HeadDashboard() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
-  // Назначити керівника студенту
   const handleAssignSupervisor = () => {
     if (selectedStudentId && selectedSupervisor) {
       setStudents((prev) =>
@@ -117,7 +115,6 @@ export default function HeadDashboard() {
     }
   };
 
-  // Назначити роль користувачу
   const handleAssignRole = () => {
     if (selectedUserId && selectedRole) {
       setUsers((prev) =>

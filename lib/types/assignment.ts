@@ -61,4 +61,26 @@ export interface UserAssignment {
   dueDate?: string | null;
   user: User;
   assignment: Assignment;
+  submission?: AssignmentSubmission;
+}
+
+export interface AssignmentSubmission {
+  id: string;
+  userId: string;
+  assignmentId: string;
+  status: SubmissionStatus;
+  submittedAt: string;
+  files: string[];
+  grade?: number;
+  feedback?: string;
+  gradedAt?: string;
+  gradedBy?: string;
+}
+
+export enum SubmissionStatus {
+  NOT_SUBMITTED = "NOT_SUBMITTED",
+  SUBMITTED = "SUBMITTED",
+  GRADED = "GRADED",
+  LATE = "LATE",
+  REJECTED = "REJECTED",
 }

@@ -4,6 +4,7 @@ import {
   getBookings,
   createBooking,
   updateBookingStatus,
+  deleteBooking,
 } from "../api/bookings";
 
 export const useGetBookings = () => {
@@ -29,6 +30,17 @@ export const useUpdateBookingStatus = () => {
 
   return useMutation({
     mutationFn: updateBookingStatus,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["bookings"] });
+    },
+  });
+};
+
+export const useDeleteBooking = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteBooking,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
     },

@@ -4,31 +4,83 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Card, CardHeader, CardBody, Divider } from "@heroui/react";
 import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
-import { Upload } from "lucide-react";
+import { FileUploaderMinimal } from "@uploadcare/react-uploader/next";
+import "@uploadcare/react-uploader/core.css";
 
 interface Submission {
   fileName: string;
+  fileUrl: string;
   status: "pending" | "approved";
   comments: string[];
 }
 
 export function DissertationTopic() {
   const t = useTranslations("dissertationTopic");
-  const [file, setFile] = useState<File | null>(null);
   const [submission, setSubmission] = useState<Submission | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [selectedFileUrl, setSelectedFileUrl] = useState<string | null>(null);
 
-  const deadline = new Date(2025, 4, 20); // 20 мая 2025
+  const deadline = new Date(2025, 4, 20);
+
+  const handleFileChange = () => {
+    setIsUploading(true);
+  };
+
+  const handleUploadSuccess = (file: { cdnUrl: string }) => {
+    const url = file.cdnUrl;
+    const name = url.split("/").pop() || "unknown";
+    setSelectedFileName(name);
+    setSelectedFileUrl(url);
+    setIsUploading(false);
+  };
+
+  const handleUploadError = (error: Error) => {
+    console.error("Upload failed:", error);
+    setIsUploading(false);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) return;
-    const mockComments: string[] = [];
+    if (!selectedFileName || !selectedFileUrl) return;
+
     setSubmission({
-      fileName: file.name,
+      fileName: selectedFileName,
+      fileUrl: selectedFileUrl,
       status: "pending",
-      comments: mockComments,
+      comments: [],
     });
-    setFile(null);
+    setSelectedFileName(null);
+    setSelectedFileUrl(null);
+  };
+
+  const handleCancelSelection = () => {
+    setSelectedFileName(null);
+    setSelectedFileUrl(null);
+  };
+
+  const renderPreview = () => {
+    if (!selectedFileUrl || !selectedFileName) return null;
+    const ext = selectedFileName.split(".").pop()?.toLowerCase() || "";
+    if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
+      return (
+        <img
+          src={selectedFileUrl}
+          alt="Preview"
+          className="max-h-40 object-contain border"
+        />
+      );
+    } else if (ext === "pdf") {
+      return (
+        <iframe
+          src={selectedFileUrl}
+          className="w-full h-48 border"
+          title="PDF Preview"
+        />
+      );
+    } else {
+      return <p className="text-sm text-default-500">{selectedFileName}</p>;
+    }
   };
 
   return (
@@ -38,34 +90,49 @@ export function DissertationTopic() {
         <span className="font-semibold">{t("deadline")}:</span>{" "}
         <span className="text-orange-500">{deadline.toLocaleDateString()}</span>
       </p>
+
       <Card>
         <CardBody>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <label className="cursor-pointer border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center hover:border-primary transition">
-              <Upload className="w-8 h-8 text-gray-500" />
-              <span className="mt-2 text-sm text-gray-600">
-                {file ? file.name : t("file")}
-              </span>
-              <input
-                type="file"
-                className="hidden"
-                onChange={(e) => setFile(e.currentTarget.files?.[0] ?? null)}
-                required
+            <div className="flex flex-col gap-2">
+              <label className="text-small text-default-500">{t("file")}</label>
+              <FileUploaderMinimal
+                sourceList="local, camera, facebook, gdrive"
+                pubkey="a33fe610c62b2d39b4e9"
+                onChange={handleFileChange}
+                onFileUploadSuccess={handleUploadSuccess}
+                onFileUploadError={handleUploadError}
+                className="w-full"
               />
-            </label>
-            {file && (
-              <p className="text-sm text-gray-700">
-                {t("mySubmission")} : {file.name}
-              </p>
-            )}
+              {isUploading && (
+                <div className="text-small text-default-500">
+                  {t("uploading")}...
+                </div>
+              )}
+              {selectedFileUrl && (
+                <div className="mt-2">
+                  {renderPreview()}
+                  <Button
+                    size="xs"
+                    variant="flat"
+                    color="danger"
+                    onPress={handleCancelSelection}
+                    className="mt-2"
+                  >
+                    {t("cancelSelection")}
+                  </Button>
+                </div>
+              )}
+            </div>
+
             <Button
               type="submit"
+              size="md"
               variant="flat"
-              className="w-full flex items-center justify-center gap-2"
-              disabled={!file || Boolean(submission)}
+              color="primary"
+              disabled={!selectedFileUrl || isUploading}
             >
-              <Upload className="w-5 h-5" />
-              {t("submitDocument")}
+              {t("submit")}
             </Button>
           </form>
         </CardBody>
@@ -77,7 +144,11 @@ export function DissertationTopic() {
             <div>
               <h3 className="font-semibold text-lg">{submission.fileName}</h3>
               <p
-                className={`text-sm font-semibold ${submission.status === "pending" ? "text-yellow-600" : "text-green-600"}`}
+                className={`text-sm font-semibold ${
+                  submission.status === "pending"
+                    ? "text-yellow-600"
+                    : "text-green-600"
+                }`}
               >
                 {submission.status === "pending" ? t("pending") : t("approved")}
               </p>

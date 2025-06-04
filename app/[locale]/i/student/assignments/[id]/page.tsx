@@ -8,31 +8,32 @@ import {
   Button,
   Chip,
   Textarea,
-  Divider,
   Avatar,
 } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { useParams, useRouter } from "next/navigation";
-import { ROUTES } from "@/common/enums/routes";
+import { FileUploaderMinimal } from "@uploadcare/react-uploader/next";
+import "@uploadcare/react-uploader/core.css";
+import { FiFile, FiDownload, FiSend, FiX } from "react-icons/fi";
 import {
-  FiPaperclip,
-  FiFile,
-  FiDownload,
-  FiUpload,
-  FiSend,
-} from "react-icons/fi";
-import { useGetAssignmentById } from "@/lib/hooks/useAssignments";
+  useGetAssignmentById,
+  useSubmitAssignment,
+} from "@/lib/hooks/useAssignments";
 import { useGetComments, useCreateComment } from "@/lib/hooks/useComments";
 import { useProfile } from "@/lib/hooks/useProfile";
-import { Assignment, Comment } from "@/lib/types/assignment";
+import { SubmissionStatus } from "@/lib/types/assignment";
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "PENDING":
+    case SubmissionStatus.NOT_SUBMITTED:
       return "warning";
-    case "COMPLETED":
+    case SubmissionStatus.SUBMITTED:
       return "primary";
-    case "EXPIRED":
+    case SubmissionStatus.GRADED:
+      return "success";
+    case SubmissionStatus.LATE:
+      return "danger";
+    case SubmissionStatus.REJECTED:
       return "danger";
     default:
       return "default";
@@ -44,7 +45,8 @@ export default function AssignmentDetail() {
   const { id = "" } = useParams();
   const router = useRouter();
   const [newComment, setNewComment] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   const { data: assignment, isLoading: isAssignmentLoading } =
     useGetAssignmentById(id as string);
@@ -53,28 +55,56 @@ export default function AssignmentDetail() {
   );
   const { data: currentUser } = useProfile();
   const createComment = useCreateComment();
+  const submitAssignment = useSubmitAssignment();
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case "PENDING":
-        return t("status.pending");
-      case "COMPLETED":
-        return t("status.completed");
-      case "EXPIRED":
-        return t("status.expired");
+      case SubmissionStatus.NOT_SUBMITTED:
+        return t("status.notSubmitted");
+      case SubmissionStatus.SUBMITTED:
+        return t("status.submitted");
+      case SubmissionStatus.GRADED:
+        return t("status.graded");
+      case SubmissionStatus.LATE:
+        return t("status.late");
+      case SubmissionStatus.REJECTED:
+        return t("status.rejected");
       default:
         return status;
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFiles(Array.from(e.target.files));
-    }
+  const handleUploadSuccess = (file: { cdnUrl: string }) => {
+    setUploadedFiles((prev) => [...prev, file.cdnUrl]);
+    setIsUploading(false);
+  };
+
+  const handleUploadError = (error: Error) => {
+    console.error("Upload failed:", error);
+    setIsUploading(false);
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = () => {
-    console.log("Submitting assignment with files:", files);
+    if (uploadedFiles.length === 0) return;
+
+    submitAssignment.mutate(
+      {
+        assignmentId: id as string,
+        files: uploadedFiles,
+      },
+      {
+        onSuccess: (data) => {
+          setUploadedFiles([]);
+        },
+        onError: (error) => {
+          console.error("Failed to submit assignment:", error);
+        },
+      }
+    );
   };
 
   const handleCommentSubmit = () => {
@@ -97,8 +127,8 @@ export default function AssignmentDetail() {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "";
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return "Not set";
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
       month: "short",
@@ -108,8 +138,8 @@ export default function AssignmentDetail() {
     }).format(date);
   };
 
-  const formatDeadline = (dateString: string) => {
-    if (!dateString) return "";
+  const formatDeadline = (dateString: string | null) => {
+    if (!dateString) return "Not set";
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
       month: "long",
@@ -162,7 +192,10 @@ export default function AssignmentDetail() {
                     />
                   </svg>
                   <span className="font-semibold">
-                    Due: {formatDeadline(assignment.dueDate)}
+                    Due:{" "}
+                    {assignment.dueDate
+                      ? formatDeadline(assignment.dueDate)
+                      : "Not set"}
                   </span>
                 </div>
               </div>
@@ -227,82 +260,116 @@ export default function AssignmentDetail() {
                 <div className="flex items-center justify-between">
                   <span className="text-default-500">Status</span>
                   <Chip
-                    color={getStatusColor(assignment.status)}
+                    color={getStatusColor(
+                      assignment.users?.find(
+                        (u) => u.userId === currentUser?.id
+                      )?.submission?.status || SubmissionStatus.NOT_SUBMITTED
+                    )}
                     variant="flat"
                   >
-                    {getStatusText(assignment.status)}
+                    {getStatusText(
+                      assignment.users?.find(
+                        (u) => u.userId === currentUser?.id
+                      )?.submission?.status || SubmissionStatus.NOT_SUBMITTED
+                    )}
                   </Chip>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-default-500">Due Date</span>
                   <span className="font-semibold text-warning">
-                    {formatDeadline(assignment.dueDate)}
+                    {assignment.dueDate
+                      ? formatDeadline(assignment.dueDate)
+                      : "Not set"}
                   </span>
                 </div>
+                {assignment.users?.find((u) => u.userId === currentUser?.id)
+                  ?.submission?.grade && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-default-500">Grade</span>
+                    <span className="font-semibold text-success">
+                      {
+                        assignment.users.find(
+                          (u) => u.userId === currentUser?.id
+                        )?.submission?.grade
+                      }
+                    </span>
+                  </div>
+                )}
               </div>
             </CardBody>
           </Card>
 
           {/* Submission Card */}
-          <Card className="bg-content1">
-            <CardHeader>
-              <h2 className="text-lg font-semibold">Your Work</h2>
-            </CardHeader>
-            <CardBody>
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-2">
-                  <label className="text-small text-default-500">
-                    Attach Files
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="file"
-                      multiple
-                      onChange={handleFileChange}
-                      className="hidden"
-                      id="file-input"
-                    />
-                    <label
-                      htmlFor="file-input"
-                      className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg cursor-pointer hover:bg-primary-600 transition-colors"
-                    >
-                      <FiUpload />
-                      <span>Choose Files</span>
+          {(!assignment.users?.find((u) => u.userId === currentUser?.id)
+            ?.submission?.status ||
+            assignment.users.find((u) => u.userId === currentUser?.id)
+              ?.submission?.status !== SubmissionStatus.GRADED) && (
+            <Card className="bg-content1">
+              <CardHeader>
+                <h2 className="text-lg font-semibold">Your Work</h2>
+              </CardHeader>
+              <CardBody>
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-small text-default-500">
+                      Attach Files
                     </label>
-                    <span className="text-small text-default-500">
-                      {files.length > 0
-                        ? `${files.length} file(s) selected`
-                        : "No files selected"}
-                    </span>
-                  </div>
-                  {files.length > 0 && (
-                    <div className="flex flex-col gap-2 mt-2">
-                      {files.map((file, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-2 p-2 bg-default-100 rounded-lg"
-                        >
-                          <FiFile className="text-primary" />
-                          <span className="text-default-400">{file.name}</span>
-                          <span className="text-small text-default-500">
-                            ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                          </span>
-                        </div>
-                      ))}
+                    <div className="flex items-center gap-2">
+                      <FileUploaderMinimal
+                        sourceList="local, camera, facebook, gdrive"
+                        pubkey="a33fe610c62b2d39b4e9"
+                        onFileUploadSuccess={handleUploadSuccess}
+                        onFileUploadError={handleUploadError}
+                        className="w-full"
+                      />
                     </div>
-                  )}
-                </div>
+                    {isUploading && (
+                      <div className="text-small text-default-500">
+                        Uploading file...
+                      </div>
+                    )}
+                    {uploadedFiles.length > 0 && (
+                      <div className="flex flex-col gap-2 mt-2">
+                        {uploadedFiles.map((fileUrl, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center gap-2 p-2 bg-default-100 rounded-lg"
+                          >
+                            <FiFile className="text-primary" />
+                            <span className="text-default-400 truncate">
+                              {fileUrl.split("/").pop()}
+                            </span>
+                            <Button
+                              size="sm"
+                              variant="light"
+                              className="ml-auto"
+                              onPress={() => handleRemoveFile(index)}
+                            >
+                              <FiX />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
-                <Button
-                  color="primary"
-                  onPress={handleSubmit}
-                  className="w-full"
-                >
-                  Submit Assignment
-                </Button>
-              </div>
-            </CardBody>
-          </Card>
+                  <Button
+                    color="primary"
+                    onPress={handleSubmit}
+                    className="w-full"
+                    isDisabled={
+                      uploadedFiles.length === 0 ||
+                      isUploading ||
+                      submitAssignment.isPending
+                    }
+                    isLoading={submitAssignment.isPending}
+                  >
+                    Submit Assignment
+                  </Button>
+                </div>
+              </CardBody>
+            </Card>
+          )}
 
           {/* Comments Section */}
           <Card className="bg-content1">

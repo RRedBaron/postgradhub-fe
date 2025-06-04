@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import { Card, CardBody, Tabs, Tab } from "@heroui/react";
 import { DissertationTopic } from "@/components/dissertation/DissertationTopic";
 import { DissertationPlan } from "@/components/dissertation/DissertationPlan";
-import { DissertationPublications } from "@/components/dissertation/DissertationPublications";
 import { DissertationFlow } from "@/components/dissertation/DissertationFlow";
 import { DissertationDefense } from "@/components/dissertation/DissertationDefense";
 
@@ -23,9 +22,6 @@ export default function DissertationPage() {
             </Tab>
             <Tab key="plan" title={t("plan")}>
               <DissertationPlan />
-            </Tab>
-            <Tab key="publications" title={t("publications")}>
-              <DissertationPublications />
             </Tab>
             <Tab key="flow" title={t("documentFlow")}>
               <DissertationFlow />

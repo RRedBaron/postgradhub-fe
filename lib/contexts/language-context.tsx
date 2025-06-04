@@ -33,7 +33,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const handleLanguageChange = (newLang: Language) => {
     setLanguage(newLang);
-    // Update the URL with the new locale
     const newPath = pathname.replace(`/${locale}`, `/${newLang}`);
     router.push(newPath);
   };
