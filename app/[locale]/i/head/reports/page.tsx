@@ -24,7 +24,6 @@ ChartJS.register(
   Title
 );
 
-// Моковые данные для графиков
 const tasksStats = {
   onTime: 75,
   late: 25,
